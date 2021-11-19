@@ -1,0 +1,18 @@
+{
+  "name": "mssocialmernstack",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "dev": "nodemon server.js"
+  },
+  "author": "Mahir Patkovic",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.13"
+  }
+}
