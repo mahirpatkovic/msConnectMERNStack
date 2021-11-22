@@ -1,24 +1,91 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
     TextField,
     InputAdornment,
     IconButton,
     Grid,
     Button,
+    Alert,
+    AlertTitle,
+    Backdrop,
+    CircularProgress,
 } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import LockIcon from '@mui/icons-material/Lock';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import SignupModal from '../../components/SignupModal';
+import Service from '../../api/service';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../store/auth';
+import Cookies from 'js-cookie';
 import './style.css';
-// import style from './style';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [isSignupModalVisible, setIsSignupModalVisible] = useState(false);
+    const [userValues, setUserValues] = useState({
+        email: '',
+        password: '',
+    });
+    const [isLoading, setIsLoading] = useState(false);
+    const [isAlertVisible, setIsAlertVisible] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    // const classes = style();
+    let isMounted = useRef(true);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        return () => {
+            isMounted.current = false;
+        };
+    }, []);
+
+    const handleInputChange = (val) => (event) => {
+        setUserValues({ ...userValues, [val]: event.target.value });
+    };
+
+    const openSigunpModalHandler = () => {
+        setIsSignupModalVisible(true);
+    };
+
+    const closeSignupModalHandler = () => {
+        if (isMounted) {
+            setIsSignupModalVisible(false);
+        }
+    };
+
+    const handleLogin = async () => {
+        setIsLoading(true);
+        await Service.login(userValues)
+            .then((res) => {
+                if (isMounted && res.status === 200) {
+                    dispatch(authActions.login());
+                    dispatch(authActions.setUser(res.data.user));
+                    Cookies.set('token', `${res.data.token}`, { expires: 1 });
+                    setIsLoading(false);
+                }
+            })
+            .catch((err) => {
+                setIsAlertVisible(true);
+                setErrorMessage(err.response?.data.message);
+                setIsLoading(false);
+            });
+    };
+
     return (
         <div className="loginsignup">
+            <Backdrop
+                sx={{
+                    color: '#fff',
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
+                open={isLoading}
+                onClick={() => setIsLoading(false)}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <div className="container">
                 <Grid container columns={{ xs: 16, sm: 16 }}>
                     <Grid>
@@ -33,13 +100,31 @@ const Login = () => {
                     <Grid>
                         <div className="content-right">
                             <form>
+                                {isAlertVisible && (
+                                    <Alert
+                                        severity="error"
+                                        action={
+                                            <HighlightOffIcon
+                                                onClick={() =>
+                                                    setIsAlertVisible(false)
+                                                }
+                                                style={{ cursor: 'pointer' }}
+                                            />
+                                        }
+                                        style={{ marginBottom: 15 }}
+                                    >
+                                        <AlertTitle>Error</AlertTitle>
+                                        {errorMessage}
+                                        <strong> Try again !</strong>
+                                    </Alert>
+                                )}
                                 <TextField
                                     id="email"
                                     placeholder="Email address"
                                     type="email"
                                     fullWidth
                                     required
-                                    // onChange={handleInputChange('email')}
+                                    onChange={handleInputChange('email')}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
@@ -56,7 +141,7 @@ const Login = () => {
                                     fullWidth
                                     required
                                     style={{ marginTop: 15, marginBottom: 15 }}
-                                    // onChange={handleInputChange('password')}
+                                    onChange={handleInputChange('password')}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position="start">
@@ -91,6 +176,7 @@ const Login = () => {
                                         fontWeight: 'bold',
                                         backgroundColor: '#1877f2',
                                     }}
+                                    onClick={handleLogin}
                                 >
                                     Log In
                                 </Button>
@@ -107,6 +193,7 @@ const Login = () => {
                                         backgroundColor: '#42b72a',
                                         marginTop: 15,
                                     }}
+                                    onClick={openSigunpModalHandler}
                                 >
                                     Create new account
                                 </Button>
@@ -125,6 +212,13 @@ const Login = () => {
                 <p>Created by Mahir Patkovic</p>
                 <p>General IT and Software Solutions d.o.o. Sarajevo</p>
             </Grid>
+
+            {isSignupModalVisible && (
+                <SignupModal
+                    visible={isSignupModalVisible}
+                    onClose={closeSignupModalHandler}
+                />
+            )}
         </div>
     );
 };
