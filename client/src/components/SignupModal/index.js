@@ -42,11 +42,10 @@ function SignupModal(props) {
     const [errorMessage, setErrorMessage] = useState('');
     const [isAlertVisible, setIsAlertVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    let isMounted = useRef(false);
+    let isMounted = useRef(true);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        isMounted.current = true;
         return () => {
             isMounted.current = false;
         };
