@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Snackbar, Alert } from '@mui/material';
 import Service from '../../api/service';
-import logo from '../../assets/logo.png';
 import { useSelector } from 'react-redux';
+import Topbar from '../../components/Topbar';
+import './style.css';
+import Sidebar from '../../components/Sidebar';
+import Feed from '../../components/Feed';
 function Home() {
     const [users, setUsers] = useState([]);
     const [isLoginMessageVisible, setIsLoginMessageVisible] = useState(false);
     const currentUser = useSelector((state) => state.auth.currentUser);
+
     useEffect(() => {
-        setIsLoginMessageVisible(true);
+        setIsLoginMessageVisible(false);
 
         const getUsers = async () => {
             await Service.getAllUser()
@@ -23,12 +27,12 @@ function Home() {
     }, []);
     return (
         <div>
-            Home Page Users:
+            {/* Home Page Users:
             <img src={logo} alt="logo" />
             {users &&
                 users.map((user, index) => (
                     <p key={index}>{user.firstName + ' ' + user.lastName}</p>
-                ))}
+                ))}*/}
             {isLoginMessageVisible && (
                 <Snackbar
                     open={isLoginMessageVisible}
@@ -50,6 +54,11 @@ function Home() {
                     </Alert>
                 </Snackbar>
             )}
+            <Topbar />
+            <div className="main__body">
+                <Sidebar />
+                <Feed />
+            </div>
         </div>
     );
 }

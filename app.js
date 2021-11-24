@@ -16,6 +16,8 @@ app.use((req, res, next) => {
     next();
 });
 app.use('/api/users', userRouter);
+// serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.static(path.join(__dirname, '/client/build')));
 
