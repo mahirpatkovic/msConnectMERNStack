@@ -65,11 +65,18 @@ const Login = () => {
                     dispatch(authActions.setUser(res.data.user));
                     Cookies.set('token', `${res.data.token}`, { expires: 1 });
                     setIsLoading(false);
+                } else {
+                    console.log(res);
+                    setErrorMessage('error');
                 }
             })
             .catch((err) => {
                 setIsAlertVisible(true);
-                setErrorMessage(err.response?.data.message);
+                setErrorMessage(
+                    err.response
+                        ? err.response.data.message
+                        : 'Connection to server has failed!'
+                );
                 setIsLoading(false);
             });
     };
@@ -111,11 +118,13 @@ const Login = () => {
                                                 style={{ cursor: 'pointer' }}
                                             />
                                         }
-                                        style={{ marginBottom: 15 }}
+                                        style={{
+                                            marginBottom: 15,
+                                        }}
                                     >
                                         <AlertTitle>Error</AlertTitle>
                                         {errorMessage}
-                                        <strong> Try again !</strong>
+                                        <strong> Try again!</strong>
                                     </Alert>
                                 )}
                                 <TextField
