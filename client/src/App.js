@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/LoginPage';
@@ -13,6 +13,7 @@ import { authActions } from './store/auth';
 import { Backdrop, CircularProgress } from '@mui/material';
 
 function App() {
+    const [isLoading, setIsLoading] = useState(true);
     const isUserLoggedIn = useSelector((state) => state.auth.isAuthenticated);
     let isMounted = useRef(true);
     const dispatch = useDispatch();
@@ -32,6 +33,7 @@ function App() {
             }
         };
         isUserAutheticated();
+        setIsLoading(false);
 
         return () => {
             isMounted.current = false;
@@ -41,14 +43,14 @@ function App() {
     return (
         <Fragment>
             <Router>
-                {!isUserLoggedIn && (
+                {isLoading && (
                     <Backdrop
                         sx={{
                             color: '#000',
                             backgroundColor: '#ddd',
                             zIndex: (theme) => theme.zIndex.drawer + 1,
                         }}
-                        open={!isUserLoggedIn}
+                        open={isLoading}
                         // onClick={() => setIsLoading(false)}
                     >
                         <CircularProgress color="inherit" />
