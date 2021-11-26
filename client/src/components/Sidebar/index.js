@@ -5,7 +5,6 @@ import {
     Storefront,
     People,
     ExpandMore,
-    Person,
     LocalHospital,
     VideoLibrary,
     EmojiFlags,
@@ -28,7 +27,7 @@ function Sidebar() {
                 <img
                     className="user__avatar"
                     src={
-                        currentUser.photo
+                        currentUser?.photo
                             ? publicFolder +
                               `profilePictures/${currentUser.photo}`
                             : publicFolder + `profilePictures/noAvatar.jpg`

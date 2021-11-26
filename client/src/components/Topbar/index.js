@@ -21,7 +21,6 @@ import './style.css';
 function Topbar() {
     const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
     const currentUser = useSelector((state) => state.auth.currentUser);
-
     const [openMenu, setOpenMenu] = useState(null);
 
     const handleOpenMenu = (event) => {
@@ -93,7 +92,7 @@ function Topbar() {
                     <img
                         className="user__avatar"
                         src={
-                            currentUser.photo
+                            currentUser && currentUser.photo
                                 ? publicFolder +
                                   `profilePictures/${currentUser.photo}`
                                 : publicFolder + `profilePictures/noAvatar.jpg`
@@ -160,11 +159,11 @@ function Topbar() {
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                 >
                     <NavLink to="/timeline">
-                        <MenuItem>
+                        <MenuItem style={{ color: 'black' }}>
                             <img
                                 className="user__avatar"
                                 src={
-                                    currentUser.photo
+                                    currentUser?.photo
                                         ? publicFolder +
                                           `profilePictures/${currentUser.photo}`
                                         : publicFolder +
@@ -172,9 +171,9 @@ function Topbar() {
                                 }
                                 alt="profilePicture"
                             />
-                            {`${currentUser.firstName}` +
+                            {`${currentUser && currentUser.firstName}` +
                                 ' ' +
-                                `${currentUser.lastName}`}
+                                `${currentUser && currentUser.lastName}`}
                         </MenuItem>
                     </NavLink>
                     <Divider />
