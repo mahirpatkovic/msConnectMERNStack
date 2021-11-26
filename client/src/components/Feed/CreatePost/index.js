@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import {
     Person,
     Videocam,
@@ -8,14 +9,27 @@ import {
 import './style.css';
 
 function CreatePost() {
+    const currentUser = useSelector((state) => state.auth.currentUser);
+    const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
     return (
         <div className="messageSender">
             <div className="messageSender__top">
-                <Person />
+                <img
+                    className="user__avatar"
+                    src={
+                        currentUser?.photo
+                            ? publicFolder +
+                              `profilePictures/${currentUser.photo}`
+                            : publicFolder + `profilePictures/noAvatar.jpg`
+                    }
+                    alt="profilePicture"
+                />
                 <form>
                     <input
                         className="messageSender__input"
-                        placeholder="What's on your mind?"
+                        placeholder={`What's on your mind ${
+                            currentUser && currentUser.firstName
+                        } ?`}
                         type="text"
                     />
                 </form>

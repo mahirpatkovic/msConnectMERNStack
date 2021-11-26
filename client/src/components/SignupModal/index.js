@@ -66,6 +66,7 @@ function SignupModal(props) {
             await Service.signup(userValues).then((res) => {
                 if (isMounted && res.status === 200) {
                     dispatch(authActions.login());
+                    dispatch(authActions.setUser(res.data.currentUser));
                     Cookies.set('token', `${res.data.token}`, { expires: 1 });
                     setIsLoading(false);
                     props.onClose();

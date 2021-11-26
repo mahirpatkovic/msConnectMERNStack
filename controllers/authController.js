@@ -128,10 +128,10 @@ exports.protect = catchAsync(async (req, res, next) => {
         return decoded.iat < changedTimestamp;
     }
 
-    // console.log(currentUser);
-    res.status(202).json({
-        status: 'success',
-        currentUser,
-    });
+    createSendToken(currentUser, 202, req, res);
+    // res.status(202).json({
+    //     status: 'success',
+    //     currentUser,
+    // });
     next();
 });
