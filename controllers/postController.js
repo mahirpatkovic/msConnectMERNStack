@@ -46,7 +46,9 @@ exports.createPost = catchAsync(async (req, res, next) => {
 		});
 		// awsS3.upload(param).promise()
 		// // Uploading files to the bucket
-		const fileData = await Promise.all(params.map((param) => param));
+		const fileData = await Promise.all(
+			params.map((param) => awsS3.upload(param).promise())
+		);
 		// console.log(fileData.map((file) => file.Key));
 		const newPost = new Post({
 			user: user,
