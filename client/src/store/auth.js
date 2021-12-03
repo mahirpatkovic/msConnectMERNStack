@@ -14,7 +14,7 @@ const authSlice = createSlice({
         },
         logout(state) {
             state.isAuthenticated = false;
-            state.isUserAdmin = false;
+            state.currentUser = [];
         },
         setUser(state, action) {
             state.currentUser = action.payload;

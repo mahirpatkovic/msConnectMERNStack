@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../store/auth';
 import { Tooltip, Menu, MenuItem, Divider, ListItemIcon } from '@mui/material';
 import {
     Search,
@@ -17,18 +19,25 @@ import {
 } from '@mui/icons-material';
 import logo from '../../assets/logo.png';
 import './style.css';
+import Cookies from 'js-cookie';
 
 function Topbar() {
+    const [openMenu, setOpenMenu] = useState(null);
     const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
     const currentUser = useSelector((state) => state.auth.currentUser);
-    const [openMenu, setOpenMenu] = useState(null);
 
+    const dispatch = useDispatch();
     const handleOpenMenu = (event) => {
         setOpenMenu(event.currentTarget);
     };
     const handleCloseMenu = () => {
         setOpenMenu(null);
     };
+    const logoutHandler = () => {
+        Cookies.remove('token');
+        dispatch(authActions.logout());
+    };
+
     return (
         <div className="header">
             <div className="header__left">
@@ -185,7 +194,7 @@ function Topbar() {
                             Settings & Privacy
                         </MenuItem>
                     </NavLink>
-                    <MenuItem>
+                    <MenuItem onClick={logoutHandler}>
                         <ListItemIcon>
                             <Logout fontSize="small" />
                         </ListItemIcon>
