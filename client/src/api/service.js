@@ -38,11 +38,13 @@ class Service {
 		return axios.get(ENV.apiBase + '/users');
 	}
 
-	static createPost(reqData, onUploadProgress) {
-		return axios.post(
-			ENV.apiBase + '/posts',
-			reqData,
-			onUploadProgress,
+	static createPost(reqData) {
+		return axios.post(ENV.apiBase + '/posts', reqData, this.reqConfig());
+	}
+
+	static getTimelinePosts(reqData) {
+		return axios.get(
+			ENV.apiBase + '/posts/timeline/' + reqData,
 			this.reqConfig()
 		);
 	}

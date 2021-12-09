@@ -54,7 +54,7 @@ function CreatePost() {
 						className='messageSender__input'
 						placeholder={`What's on your mind ${
 							currentUser && currentUser.firstName
-						} ?`}
+						}?`}
 						onClick={openCreatePostModal}
 						style={{ cursor: 'pointer' }}
 					/>

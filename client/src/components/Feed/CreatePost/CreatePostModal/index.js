@@ -19,6 +19,7 @@ import {
 	Alert,
 	AlertTitle,
 	CircularProgress,
+	useMediaQuery,
 	// LinearProgress,
 } from '@mui/material';
 import {
@@ -54,6 +55,7 @@ function CreatePostModal(props) {
 	const [isAlertVisible, setIsAlertVisible] = useState(false);
 	const currentUser = useSelector((state) => state.auth.currentUser);
 	const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+	const isMobile = useMediaQuery('(max-width:768px)');
 
 	useEffect(() => {
 		files.forEach((file) => URL.revokeObjectURL(file.preview));
@@ -128,18 +130,6 @@ function CreatePostModal(props) {
 		setFiles([]);
 	};
 
-	// const options = {
-	// 	onUploadProgress: (progressEvent) => {
-	// 		const { loaded, total } = progressEvent;
-	// 		let percent = Math.floor((loaded * 100) / total);
-	// 		console.log(`${loaded}kb of ${total}kb | ${percent}%`);
-
-	// 		if (percent <= 100) {
-	// 			setUploadProgress(percent);
-	// 		}
-	// 	},
-	// };
-
 	const createPostHandler = () => {
 		if (files.length > 0 && files.length < 5) {
 			setIsLoading(true);
@@ -152,15 +142,17 @@ function CreatePostModal(props) {
 			formData.append('description', postValues.description);
 			formData.append('visible', postValues.visible);
 			formData.append('user', currentUser._id);
-			// axios
-			// 	.post('http://127.0.0.1:8800/api/posts/', formData
-			Service.createPost(formData).then((res) => {
-				console.log(res);
-				setIsLoading(false);
-				props.onClose();
-				props.onUploadMessage();
-			});
-			console.log(files);
+
+			Service.createPost(formData)
+				.then(() => {
+					setIsLoading(false);
+					props.onClose();
+					props.onUploadMessage();
+				})
+				.catch((err) => {
+					console.error(err);
+				});
+			// console.log(files);
 		} else {
 			setIsAlertVisible(true);
 			setErrorMessage('Please upload file first');
@@ -168,14 +160,14 @@ function CreatePostModal(props) {
 	};
 	return (
 		<div>
-			<Dialog onClose={props.onClose} open={props.visible}>
+			<Dialog onClose={props.onClose} open={props.visible} fullWidth>
 				<Backdrop
 					sx={{
 						color: '#fff',
 						zIndex: (theme) => theme.zIndex.drawer + 1,
 					}}
 					open={isLoading}
-					onClick={() => setIsLoading(false)}
+					// onClick={() => setIsLoading(false)}
 				>
 					<CircularProgress color='inherit' />
 					{/* {uploadProgress > 0 && uploadProgress < 100 && (
@@ -186,29 +178,28 @@ function CreatePostModal(props) {
 					)} */}
 				</Backdrop>
 				<div>
-					<DialogTitle style={{ width: 500 }}>
+					<DialogTitle>
 						<Grid
 							container
 							spacing={2}
-							columns={16}
+							columns={14}
 							style={{ height: 50 }}
 						>
-							<Grid item xs={14}>
+							<Grid item xs={13}>
 								<h3
 									style={{
 										textAlign: 'center',
-										marginLeft: 20,
 									}}
 								>
 									Create post
 								</h3>
 							</Grid>
-							<Grid item xs={2}>
+							<Grid item xs={1}>
 								<CancelOutlined
-									fontSize='large'
 									style={{
 										color: 'gray',
 										cursor: 'pointer',
+										marginTop: 7,
 									}}
 									onClick={props.onClose}
 								/>
@@ -395,7 +386,6 @@ function CreatePostModal(props) {
 									<Stack
 										direction='row'
 										alignItems='center'
-										spacing={1}
 										justifyContent='flex-end'
 									>
 										<IconButton
