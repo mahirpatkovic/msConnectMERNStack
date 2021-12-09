@@ -1,24 +1,24 @@
 * {
-    margin: 0;
-    padding: 0;
-    outline: 0;
-    text-decoration: none;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	outline: 0;
+	text-decoration: none;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
 }
 body {
-    font-family: arial;
-    font-size: 14px;
-    color: #1c1e21;
-    font-weight: normal;
-    background: #f0f2f5;
+	font-family: arial;
+	font-size: 14px;
+	color: #1c1e21;
+	font-weight: normal;
+	background: #f0f2f5;
 }
 .container {
-    max-width: 900px;
-    margin: auto;
-    margin-top: 120px;
+	max-width: 900px;
+	margin: auto;
+	margin-top: 120px;
 }
 
 /* .row {
@@ -29,168 +29,169 @@ body {
     justify-content: space-between;
 } */
 .content-left {
-    max-width: 500px;
-    margin: auto;
+	max-width: 500px;
+	margin: auto;
 }
 .content-left h1 {
-    font-size: 50px;
-    color: #1877f2;
-    margin-bottom: 20px;
-    font-weight: 900;
+	font-size: 50px;
+	color: #1877f2;
+	margin-bottom: 20px;
+	font-weight: 900;
 }
 .content-left h2 {
-    font-size: 28px;
-    line-height: 32px;
-    font-weight: 500;
-    margin-bottom: 40px;
+	font-size: 28px;
+	line-height: 32px;
+	font-weight: 500;
+	margin-bottom: 40px;
 }
 
 .content-right {
-    max-width: 400px;
-    margin: auto;
-    text-align: center;
+	max-width: 400px;
+	margin: auto;
+	text-align: center;
 }
 .content-right form {
-    width: 100%;
-    height: auto;
-    background: #fff;
-    border-radius: 10px;
-    padding: 15px;
-    -webkit-box-shadow: -1px -1px 8px -1px rgba(0, 0, 0, 0.52);
-    -moz-box-shadow: -1px -1px 8px -1px rgba(0, 0, 0, 0.52);
-    box-shadow: -1px -1px 8px -1px rgba(0, 0, 0, 0.52);
-    margin-bottom: 30px;
+	width: 100%;
+	height: auto;
+	background: #fff;
+	border-radius: 10px;
+	padding: 15px;
+	-webkit-box-shadow: -1px -1px 8px -1px rgba(0, 0, 0, 0.52);
+	-moz-box-shadow: -1px -1px 8px -1px rgba(0, 0, 0, 0.52);
+	box-shadow: -1px -1px 8px -1px rgba(0, 0, 0, 0.52);
+	margin-bottom: 30px;
 }
 .content-right form input {
-    width: 100%;
-    height: 50px;
-    font-size: 17px;
-    border-radius: 5px;
-    padding: 0 15px;
+	width: 100%;
+	height: 50px;
+	font-size: 17px;
+	border-radius: 5px;
+	padding: 0 15px;
 }
 .content-right form input:hover {
-    border-color: #1877f2;
-    background: #f0f2f5;
+	border-color: #1877f2;
+	background: #f0f2f5;
 }
 .loginBtn {
-    font-size: 20px;
-    background: #1877f2;
-    height: 50px;
-    color: #fff;
-    line-height: 50px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    text-transform: capitalize;
-    text-transform: none;
-    width: 100%;
+	font-size: 20px;
+	background: #1877f2;
+	height: 50px;
+	color: #fff;
+	line-height: 50px;
+	border-radius: 5px;
+	margin-bottom: 20px;
+	text-transform: capitalize;
+	text-transform: none;
+	width: 100%;
 }
 .signupBtn {
-    font-size: 20px;
-    background: #42b72a;
-    height: 50px;
-    color: #fff;
-    line-height: 50px;
-    border-radius: 5px;
-    margin-top: 15px;
-    margin-bottom: 20px;
-    text-transform: capitalize;
-    text-transform: none;
-    width: 60%;
+	font-size: 20px;
+	background: #42b72a;
+	height: 50px;
+	color: #fff;
+	line-height: 50px;
+	border-radius: 5px;
+	margin-top: 15px;
+	margin-bottom: 20px;
+	text-transform: capitalize;
+	text-transform: none;
+	width: 60%;
 }
 .underline {
-    margin-top: 15px;
+	margin-top: 15px;
 }
 /* .login a {
     display: block;
 } */
 .create-btn a {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 0 17px;
-    background: #4cd137;
-    transition: 0.3s;
+	display: inline-block;
+	margin-top: 20px;
+	padding: 0 17px;
+	background: #4cd137;
+	transition: 0.3s;
 }
 .create-btn a:hover {
-    background: #44bd32;
+	background: #44bd32;
 }
 .forgot p {
-    font-size: 16px;
-    margin-top: 15px;
-    line-height: 19px;
-    color: #1877f2;
-    cursor: pointer;
+	font-size: 16px;
+	margin-top: 15px;
+	line-height: 19px;
+	color: #1877f2;
+	cursor: pointer;
 }
 .forgot a:hover,
 .content-right p a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 .content-right p a {
-    color: #1c1e21;
-    font-weight: 600;
+	color: #1c1e21;
+	font-weight: 600;
 }
 
 .credits {
-    text-align: center;
-    bottom: 10%;
-    position: absolute;
+	text-align: center;
+	bottom: 10%;
+	position: absolute;
+	color: grey;
 }
 
 @media (min-width: 600px) and (max-width: 900px) {
-    .container {
-        width: 700px;
-    }
-    .content-left {
-        max-width: 100%;
-        width: 90%;
-    }
-    .content-left h1 {
-        font-size: 40px;
-    }
-    .content-left h2 {
-        font-size: 25px;
-        max-width: 70%;
-    }
-    .content-right {
-        max-width: 100%;
-    }
-    .content-right form {
-        max-width: 100%;
-        width: 90%;
-        margin: 5%;
-    }
-    .credits {
-        text-align: center;
-        margin-top: 50px;
-        position: relative;
-    }
+	.container {
+		width: 700px;
+	}
+	.content-left {
+		max-width: 100%;
+		width: 90%;
+	}
+	.content-left h1 {
+		font-size: 40px;
+	}
+	.content-left h2 {
+		font-size: 25px;
+		max-width: 70%;
+	}
+	.content-right {
+		max-width: 100%;
+	}
+	.content-right form {
+		max-width: 100%;
+		width: 90%;
+		margin: 5%;
+	}
+	.credits {
+		text-align: center;
+		margin-top: 50px;
+		position: relative;
+	}
 }
 @media (max-width: 600px) {
-    .container {
-        margin-top: 0;
-    }
-    .content-left {
-        max-width: 100%;
-        width: 90%;
-        margin: 5%;
-    }
-    .content-left h1 {
-        font-size: 40px;
-    }
-    .content-left h2 {
-        font-size: 25px;
-        max-width: 70%;
-    }
-    .content-right {
-        max-width: 100%;
-    }
-    .content-right form {
-        max-width: 100%;
-        width: 90%;
-        margin: 5%;
-    }
-    .credits {
-        text-align: center;
-        margin-top: 50px;
-        position: relative;
-    }
+	.container {
+		margin-top: 0;
+	}
+	.content-left {
+		max-width: 100%;
+		width: 90%;
+		margin: 5%;
+	}
+	.content-left h1 {
+		font-size: 40px;
+	}
+	.content-left h2 {
+		font-size: 25px;
+		max-width: 70%;
+	}
+	.content-right {
+		max-width: 100%;
+	}
+	.content-right form {
+		max-width: 100%;
+		width: 90%;
+		margin: 5%;
+	}
+	.credits {
+		text-align: center;
+		margin-top: 50px;
+		position: relative;
+	}
 }

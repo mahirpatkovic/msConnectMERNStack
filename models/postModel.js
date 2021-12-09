@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const PostSchema = new mongoose.Schema(
+const postSchema = new mongoose.Schema(
 	{
 		user: {
 			type: mongoose.Schema.ObjectId,
@@ -9,7 +9,7 @@ const PostSchema = new mongoose.Schema(
 		description: {
 			type: String,
 		},
-		files: [String],
+		files: [Object],
 		likes: {
 			type: Array,
 			default: [],
@@ -23,4 +23,12 @@ const PostSchema = new mongoose.Schema(
 	{ timestamps: true }
 );
 
-module.exports = mongoose.model('Post', PostSchema);
+postSchema.pre(/^find/, function (next) {
+	this.populate({
+		path: 'user',
+		select: 'firstName lastName photo',
+	});
+	next();
+});
+
+module.exports = mongoose.model('Post', postSchema);

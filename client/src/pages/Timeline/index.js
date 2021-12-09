@@ -1,16 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import Topbar from '../../components/Topbar';
 import Sidebar from '../../components/Sidebar';
-function UserPage() {
-    return (
-        <div>
-            <Topbar />
-            <div className="main__body">
-                <Sidebar />
-                <h4 style={{ marginTop: 50 }}>This is Timeline page</h4>
-            </div>
-        </div>
-    );
+import Posts from '../../components/Feed/Posts';
+import Service from '../../api/service';
+import SkeletonLoader from '../../components/SkeletonLoader';
+import './style.css';
+
+function TimelinePage() {
+	const [posts, setPosts] = useState([]);
+	const [isSkeletonVisible, setIsSkeletonVisible] = useState(true);
+	const currentUser = useSelector((state) => state.auth.currentUser);
+	useEffect(() => {
+		Service.getTimelinePosts(currentUser._id).then((res) => {
+			setPosts(res.data.data);
+			setIsSkeletonVisible(false);
+		});
+	}, [currentUser._id]);
+	return (
+		<div>
+			<Topbar />
+			<div className='main__body'>
+				<Sidebar />
+
+				<div className='feed'>
+					<h4>This is Timeline page</h4>
+					{isSkeletonVisible ? (
+						<SkeletonLoader />
+					) : (
+						<Posts posts={posts} />
+					)}
+				</div>
+			</div>
+		</div>
+	);
 }
 
-export default UserPage;
+export default TimelinePage;

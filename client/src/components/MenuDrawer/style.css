@@ -1,0 +1,44 @@
+.profile__avatar img {
+	border-radius: 50%;
+	width: 80px;
+	margin: 50px 100px 0 100px;
+}
+.profile__avatar h4 {
+	text-align: center;
+}
+.profile__avatar p {
+	text-align: center;
+	color: #ccc;
+}
+.signature {
+	text-align: center;
+	margin: 50px 50px 0 55px;
+}
+.signature img {
+	height: 50px;
+}
+.menuRow {
+	display: flex;
+	align-items: center;
+	padding: 5px;
+	cursor: pointer;
+	width: 90%;
+	margin-left: 5%;
+}
+.menuRow.active {
+	/* border-bottom: 4px solid #2e81f4; */
+	background-color: #ddd;
+	border-radius: 10px;
+}
+.menuRow.active h4 {
+	color: #2e81f4;
+}
+.menuRow h4 {
+	margin-left: 20px;
+	font-weight: 600;
+	color: black;
+}
+.menuRow .material-icons {
+	font-size: xx-large;
+	color: #2e81f4;
+}

@@ -5,11 +5,11 @@ const router = express.Router();
 
 router.post(
 	'/',
-	// postController.uploadVideos,
-	// postController.uploadPostImages,
-	// postController.resizePostImages,
 	postController.uploadFiles,
+	// postController.resizeUploadImages,
 	postController.createPost
 );
+
+router.get('/timeline/:userId', postController.getTimelinePosts);
 
 module.exports = router;
