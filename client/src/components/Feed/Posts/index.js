@@ -63,6 +63,7 @@ function Posts(props) {
 										clickable: true,
 									}}
 								>
+									{/* `data:video/${file.type.substring(1)};base64, */}
 									{post.files.map((file, index) =>
 										file.type ===
 										('.mp4' || '.MPEG-4' || '.mkv') ? (
@@ -74,9 +75,7 @@ function Posts(props) {
 													<video
 														width='100%'
 														controls
-														src={`data:video/${file.type.substring(
-															1
-														)};base64,${file.file}`}
+														src={`${file.file}`}
 													/>
 												</div>
 											</SwiperSlide>
@@ -88,9 +87,7 @@ function Posts(props) {
 												<div className='swiper-zoom-container'>
 													<img
 														width='100%'
-														src={`data:image/${file.type.substring(
-															1
-														)};base64,${file.file}`}
+														src={`${file.file}`}
 														alt=''
 													/>
 												</div>

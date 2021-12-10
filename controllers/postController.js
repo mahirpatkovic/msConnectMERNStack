@@ -7,6 +7,7 @@ const aws = require('aws-sdk');
 const awsS3 = new aws.S3({
 	accessKeyId: process.env.AWS_ACCESS_KEY,
 	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+	// region: process.env.AWS_REGION
 });
 const bucketName = process.env.AWS_BUCKET_NAME;
 
@@ -96,31 +97,43 @@ exports.getTimelinePosts = catchAsync(async (req, res, next) => {
 			params.push({
 				Bucket: `${bucketName}/${file.file.split('/')[0]}`,
 				Key: `${file.file.split('/')[1]}`, // File name you want to save as in S3
+				// Expires: 3600,
 			});
 		});
 	}
-
 	const fileData = await Promise.all(
 		params.map((param) =>
 			awsS3
-				.getObject(param)
-				.promise()
-				.then((data) => {
-					let buf = Buffer.from(data.Body);
-					let base64 = buf.toString('base64');
+				.getSignedUrlPromise('getObject', param).then((data)=>{
 					return {
-						base64,
-						type: path.extname(param.Key),
-					};
+						data, 
+						type: path.extname(param.Key)
+					}
 				})
 		)
 	);
+
+	// const fileData = await Promise.all(
+	// 	params.map((param) =>
+	// 		awsS3
+	// 			.getObject(param)
+	// 			.promise()
+	// 			.then((data) => {
+	// 				let buf = Buffer.from(data.Body);
+	// 				let base64 = buf.toString('base64');
+	// 				return {
+	// 					base64,
+	// 					type: path.extname(param.Key),
+	// 				};
+	// 			})
+	// 	)
+	// );
 
 	let j = 0;
 	for (let post of allPosts) {
 		for (let i = 0; i < post.files.length; i++) {
 			post.files[i] = {
-				file: fileData[j].base64,
+				file: fileData[j].data,
 				type: fileData[j].type,
 			};
 			j++;
