@@ -7,7 +7,7 @@ const aws = require('aws-sdk');
 const awsS3 = new aws.S3({
 	accessKeyId: process.env.AWS_ACCESS_KEY,
 	secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-	// region: process.env.AWS_REGION
+	region: process.env.AWS_REGION
 });
 const bucketName = process.env.AWS_BUCKET_NAME;
 
@@ -97,7 +97,7 @@ exports.getTimelinePosts = catchAsync(async (req, res, next) => {
 			params.push({
 				Bucket: `${bucketName}/${file.file.split('/')[0]}`,
 				Key: `${file.file.split('/')[1]}`, // File name you want to save as in S3
-				// Expires: 3600,
+				Expires: 3600,
 			});
 		});
 	}
