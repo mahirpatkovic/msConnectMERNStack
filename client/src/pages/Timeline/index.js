@@ -5,35 +5,48 @@ import Sidebar from '../../components/Sidebar';
 import Posts from '../../components/Feed/Posts';
 import Service from '../../api/service';
 import SkeletonLoader from '../../components/SkeletonLoader';
+
 import './style.css';
+import Cover from './Cover';
 
 function TimelinePage() {
-	const [posts, setPosts] = useState([]);
-	const [isSkeletonVisible, setIsSkeletonVisible] = useState(true);
-	const currentUser = useSelector((state) => state.auth.currentUser);
-	useEffect(() => {
-		Service.getTimelinePosts(currentUser._id).then((res) => {
-			setPosts(res.data.data);
-			setIsSkeletonVisible(false);
-		});
-	}, [currentUser._id]);
-	return (
-		<div>
-			<Topbar />
-			<div className='main__body'>
-				<Sidebar />
+    const [posts, setPosts] = useState([]);
+    const [isSkeletonVisible, setIsSkeletonVisible] = useState(true);
+    const currentUser = useSelector((state) => state.auth.currentUser);
+    useEffect(() => {
+        const getTimeLinePosts = async () => {
+            await Service.getTimelinePosts(currentUser._id).then((res) => {
+                if (res.data.status === 'success') {
+                    let dataArr = [];
+                    for (let data of res.data.data) {
+                        dataArr.unshift(data);
+                    }
+                    setPosts(dataArr);
+                }
 
-				<div className='feed'>
-					<h4>This is Timeline page</h4>
-					{isSkeletonVisible ? (
-						<SkeletonLoader />
-					) : (
-						<Posts posts={posts} />
-					)}
-				</div>
-			</div>
-		</div>
-	);
+                setIsSkeletonVisible(false);
+            });
+        };
+
+        getTimeLinePosts();
+    }, [currentUser._id]);
+    return (
+        <div>
+            <Topbar />
+            <div className='main__body'>
+                <Sidebar />
+
+                <div className='timelineFeed'>
+                    <Cover className='cover' />
+                    {isSkeletonVisible ? (
+                        <SkeletonLoader />
+                    ) : (
+                        <Posts posts={posts} />
+                    )}
+                </div>
+            </div>
+        </div>
+    );
 }
 
 export default TimelinePage;

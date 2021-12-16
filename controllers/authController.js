@@ -1,10 +1,10 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
+// const crypto = require('crypto');
 const { promisify } = require('util');
 const catchAsync = require('../utils/catchAsync');
-const AppError = require('../utils/appError');
+// const AppError = require('../utils/appError');
 const validator = require('validator');
 
 const signToken = (id) => {
@@ -93,6 +93,44 @@ exports.login = catchAsync(async (req, res, next) => {
     createSendToken(user, 200, req, res);
 });
 
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+    let token;
+    if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith('Bearer')
+    ) {
+        token = req.headers.authorization.split(' ')[1];
+    }
+    if (!token) {
+        return res.status(401).json({
+            message: 'You are not logged in. Please log in to get access',
+        });
+    }
+
+    // 2) Verification token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    // 3) Check if user still exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+        return res.status(401).json({
+            message: 'The user belonging to this token does no longer exist.',
+        });
+    }
+
+    // 4) Check if user changed password after the token was issued
+    if (currentUser.passwordChangedAt) {
+        const changedTimestamp = parseInt(
+            currentUser.passwordChangedAt.getTime() / 1000,
+            10
+        );
+        return decoded.iat < changedTimestamp;
+    }
+    createSendToken(currentUser, 202, req, res);
+
+    // next();
+});
+
 exports.protect = catchAsync(async (req, res, next) => {
     let token;
     if (
@@ -103,7 +141,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     }
     if (!token) {
         return res.status(401).json({
-            message: 'You are not logged. Please log in to get access',
+            message: 'You are not logged in. Please log in to get access',
         });
     }
 
@@ -127,10 +165,5 @@ exports.protect = catchAsync(async (req, res, next) => {
         return decoded.iat < changedTimestamp;
     }
 
-    createSendToken(currentUser, 202, req, res);
-    // res.status(202).json({
-    //     status: 'success',
-    //     currentUser,
-    // });
     next();
 });

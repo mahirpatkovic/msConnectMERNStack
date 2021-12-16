@@ -1,29 +1,31 @@
 .feed {
-	flex: 1;
-	padding: 30px 100px;
-	margin-left: 50px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	max-width: 50%;
+    flex: 1;
+    padding: 30px 100px;
+    margin-left: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 50%;
 }
 
 @media (max-width: 768px) {
-	.feed {
-		margin-top: 10px;
-		width: 80%;
-		max-width: 80%;
-		padding: 0;
-		margin: 0px;
-	}
+    .feed {
+        max-width: 100%;
+        padding: 10px;
+        margin-left: 0;
+    }
 }
 
-@media (min-width: 769px) and (max-width: 1440px) {
-	/* CSS To Target 767 px width of screen */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .feed {
+        max-width: 90%;
+        padding: 10px;
+    }
+}
 
-	.feed {
-		width: 50%;
-		padding: 10px 50px;
-	}
+@media (min-width: 1025px) and (max-width: 1850px) {
+    .feed {
+        margin-left: 10%;
+    }
 }
