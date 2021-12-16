@@ -1,45 +1,52 @@
 .sidebar {
-	padding: 25px 10px;
-	flex: 0.33;
-	max-width: 25%;
+    padding: 25px 10px;
+    flex: 0.33;
+    max-width: 25%;
 }
 .sidebarRow {
-	display: flex;
-	align-items: center;
-	padding: 10px;
-	cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .sidebarRow:hover {
-	background-color: lightgray;
-	border-radius: 10px;
+    background-color: lightgray;
+    border-radius: 10px;
 }
 .sidebarRow.active {
-	/* border-bottom: 4px solid #2e81f4; */
-	background-color: white;
-	border-radius: 10px;
+    /* border-bottom: 4px solid #2e81f4; */
+    background-color: #fff;
+    border-radius: 10px;
 }
 
 .sidebarRow.active h4 {
-	color: #2e81f4;
+    color: #2e81f4;
 }
 .sidebarRow h4 {
-	margin-left: 20px;
-	font-weight: 600;
-	color: black;
+    font-weight: 600;
+    color: black;
+    margin: 3px 0 0 20px;
 }
 
 .sidebarRow .material-icons {
-	font-size: xx-large;
-	color: #2e81f4;
+    font-size: xx-large;
+    color: #2e81f4;
 }
 .user__avatar {
-	border-radius: 50%;
-	width: 45px;
+    border-radius: 50%;
+    width: 45px;
 }
 
-@media (max-width: 768px) {
-	.sidebar {
-		display: none;
-	}
+@media (max-width: 1024px) {
+    .sidebar {
+        display: none;
+    }
+}
+
+@media (min-width: 1024px) and (max-width: 1850px) {
+    .sidebar {
+        max-width: 15%;
+    }
 }
