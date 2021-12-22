@@ -1,105 +1,108 @@
 .postViewDetails {
-	display: flex;
-	width: 100px;
-	align-items: center;
-	padding: 3px;
-	cursor: pointer;
-	background-color: #ddd;
-	border-radius: 10px;
+    display: flex;
+    width: 100px;
+    align-items: center;
+    cursor: pointer;
+    background-color: #ddd;
+    border-radius: 10px;
+    margin-top: -10px;
+}
+.postViewDetails h4 {
+    padding: 5px 0 0 5px;
 }
 .dragArea {
-	height: 200px;
-	border: 3px dashed #e0eafc;
-	border-radius: 10px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-direction: column;
-	cursor: pointer;
-	width: 100%;
+    height: 200px;
+    border: 3px dashed #e0eafc;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+    width: 100%;
 }
 .dragArea:hover {
-	background-color: #ddd;
+    background-color: #ddd;
 }
 .dragArea p {
-	color: gray;
+    color: gray;
 }
 .dragArea .icon {
-	font-size: 50px;
-	color: #2e81f4;
+    font-size: 50px;
+    color: #2e81f4;
 }
 
 .dragArea .header {
-	font-size: 20px;
-	font-weight: 500;
-	color: #34495e;
+    font-size: 20px;
+    font-weight: 500;
+    color: #34495e;
 }
 
 .dragArea .support {
-	font-size: 12px;
-	color: gray;
-	margin: 10px 0 15px 0;
+    font-size: 12px;
+    color: gray;
+    margin: 10px 0 15px 0;
 }
 
 .dragArea .button {
-	font-size: 20px;
-	font-weight: 500;
-	color: #2e81f4;
-	cursor: pointer;
+    font-size: 20px;
+    font-weight: 500;
+    color: #2e81f4;
+    cursor: pointer;
 }
 
 .dragArea.active {
-	border: 2px solid #2e81f4;
+    border: 2px solid #2e81f4;
 }
 
 .dragArea img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 .addToYourPost {
-	border: 1px solid gray;
-	border-radius: 10px;
-	padding: 5px;
-	margin: 10px auto;
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 10px auto;
 }
 .addToYourPost h3 {
-	padding: 10px;
+    padding: 10px;
 }
 .loginBtn {
-	text-transform: none;
-	font-weight: bold;
-	background-color: '#1877f2';
-	margin-top: 10px;
+    text-transform: none;
+    font-weight: bold;
+    background-color: '#1877f2';
+    margin-top: 10px;
 }
 
 .imageContainer {
-	display: flex;
-	flex-direction: row;
-	margin-top: 16px;
-	flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    margin-top: 16px;
+    flex-wrap: wrap;
 }
 
 .image {
-	border-radius: 2px;
-	border: 1px solid #eaeaea;
-	margin-bottom: 8px;
-	margin-right: 8px;
-	width: 100px;
-	height: 100px;
-	padding: 4px;
-	box-sizing: border-box;
-	display: inline-flex;
+    border-radius: 2px;
+    border: 1px solid #eaeaea;
+    margin-bottom: 8px;
+    margin-right: 8px;
+    width: 100px;
+    height: 100px;
+    padding: 4px;
+    box-sizing: border-box;
+    display: inline-flex;
 }
 
 .imageInner {
-	display: flex;
-	min-width: 0px;
-	overflow: hidden;
+    display: flex;
+    min-width: 0px;
+    overflow: hidden;
 }
 
 .img {
-	display: block;
-	width: auto;
-	height: 100%;
+    display: block;
+    width: auto;
+    height: 100%;
 }

@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialAuthState = {
     isAuthenticated: false,
-    currentUser: [],
+    currentUser: {},
 };
 
 const authSlice = createSlice({
@@ -14,10 +14,13 @@ const authSlice = createSlice({
         },
         logout(state) {
             state.isAuthenticated = false;
-            state.currentUser = [];
+            state.currentUser = {};
         },
         setUser(state, action) {
             state.currentUser = action.payload;
+        },
+        setUserCover(state, action) {
+            state.currentUser.cover = action.payload;
         },
     },
 });

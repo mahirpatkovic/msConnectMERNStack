@@ -25,6 +25,8 @@ import {
 import StyledMenu from './StyledMenu';
 import SelectCoverPhotoModal from '../SelectCoverPhotoModal';
 import Cropper from 'react-easy-crop';
+import { useDispatch } from 'react-redux';
+import { authActions } from '../../../store/auth';
 
 import './style.css';
 import 'antd/dist/antd.css';
@@ -49,6 +51,7 @@ function Cover(props) {
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
     const isMobile = useMediaQuery('(max-width:576px)');
+    const dispatch = useDispatch();
 
     const handleOpenEditCoverMenu = (event) => {
         setIsEditCoverMenuVisible(event.currentTarget);
@@ -82,9 +85,11 @@ function Cover(props) {
                     image: coverEditor,
                     userId: currentUser._id,
                 }).then((res) => {
-                    console.log(res);
                     setIsCoverEditCropperVisible(false);
                     setIsSaveCoverBarVisible(false);
+                    dispatch(
+                        authActions.setUserCover(res.data.currentUser.cover)
+                    );
                     setCurrentCoverPhoto(res.data.currentUser.cover);
                     setIsLoading(false);
                 });

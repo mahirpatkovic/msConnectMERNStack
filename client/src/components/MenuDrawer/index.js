@@ -38,7 +38,7 @@ function MenuDrawer(props) {
             >
                 <div className='menuRow'>
                     <Home className='material-icons' />
-                    <h3>Home</h3>
+                    <h4>Home</h4>
                 </div>
             </NavLink>
             <NavLink
@@ -49,7 +49,7 @@ function MenuDrawer(props) {
             >
                 <div className='menuRow'>
                     <Chat className='material-icons' />
-                    <h3>Messenger</h3>
+                    <h4>Messenger</h4>
                 </div>
             </NavLink>
             <NavLink
@@ -60,7 +60,7 @@ function MenuDrawer(props) {
             >
                 <div className='menuRow'>
                     <Groups className='material-icons' />
-                    <h3>Groups</h3>
+                    <h4>Groups</h4>
                 </div>
             </NavLink>
             <NavLink
@@ -71,7 +71,7 @@ function MenuDrawer(props) {
             >
                 <div className='menuRow'>
                     <AccountCircle className='material-icons' />
-                    <h3>Profile</h3>
+                    <h4>Profile</h4>
                 </div>
             </NavLink>
             <NavLink
@@ -82,7 +82,7 @@ function MenuDrawer(props) {
             >
                 <div className='menuRow'>
                     <Settings className='material-icons' />
-                    <h3>Settings & Privacy</h3>
+                    <h4>Settings & Privacy</h4>
                 </div>
             </NavLink>
             <div
@@ -91,7 +91,7 @@ function MenuDrawer(props) {
                 style={{ marginLeft: 30, padding: 10 }}
             >
                 <Logout className='material-icons' />
-                <h3>Logout</h3>
+                <h4>Logout</h4>
             </div>
 
             <Divider
@@ -105,11 +105,11 @@ function MenuDrawer(props) {
                 textAlign='center'
             />
             <div className='signature'>
-                <h3 style={{ width: 170, color: 'grey' }}>
+                <h4 style={{ width: 170, color: 'grey' }}>
                     {' '}
                     MSConnect ©2021 Created by General IT and Software Solutions
                     d.o.o. Sarajevo by Mahir Patkovic
-                </h3>
+                </h4>
                 <img alt='MS connect' src={logo} />
             </div>
         </div>
