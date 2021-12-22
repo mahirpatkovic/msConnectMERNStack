@@ -225,8 +225,7 @@ function CreatePostModal(props) {
                                     className='user__avatar'
                                     src={
                                         currentUser && currentUser.photo
-                                            ? publicFolder +
-                                              `profilePictures/${currentUser.photo}`
+                                            ? currentUser.photo
                                             : publicFolder +
                                               `profilePictures/noAvatar.jpg`
                                     }
@@ -441,120 +440,6 @@ function CreatePostModal(props) {
                         </form>
                     </DialogContent>
                 </div>
-                {/* ) : (
-					<div>
-						<DialogTitle style={{ width: 500 }}>
-							<Grid
-								container
-								spacing={3}
-								columns={16}
-								style={{ height: 50 }}
-							>
-								<Grid item xs={2}>
-									<KeyboardBackspace
-										style={{
-											marginTop: 5,
-											marginLeft: -10,
-											color: 'gray',
-											cursor: 'pointer',
-										}}
-										onClick={() =>
-											setIsPostViewModalVisible(false)
-										}
-									/>
-								</Grid>
-								<Grid item xs={14}>
-									<p
-										style={{
-											textAlign: 'center',
-											marginLeft: -50,
-										}}
-									>
-										Select audience
-									</p>
-								</Grid>
-							</Grid>
-						</DialogTitle>
-						<DialogContent dividers>
-							<h3>Who can see your post?</h3>
-							<p style={{ color: 'gray' }}>
-								Your post will show up in News Feed, on your
-								profile and in search results.
-							</p>
-							<MenuList>
-								<MenuItem onChange={inputAudienceChangeHandler}>
-									<ListItemIcon>
-										<Public
-											style={{
-												color: 'black',
-											}}
-										/>
-									</ListItemIcon>
-									<ListItemText>Public</ListItemText>
-									<Typography
-										variant='body2'
-										color='text.secondary'
-									>
-										<Radio
-											value='public'
-											name='radio-buttons'
-											checked={
-												selectedAudienceValue ===
-												'Public'
-											}
-										/>
-									</Typography>
-								</MenuItem>
-								<MenuItem onChange={inputAudienceChangeHandler}>
-									<ListItemIcon>
-										<Group
-											style={{
-												color: 'black',
-											}}
-										/>
-									</ListItemIcon>
-									<ListItemText>Friends</ListItemText>
-									<Typography
-										variant='body2'
-										color='text.secondary'
-									>
-										<Radio
-											value='friends'
-											name='radio-buttons'
-											checked={
-												selectedAudienceValue ===
-												'Friends'
-											}
-										/>
-									</Typography>
-								</MenuItem>
-								<MenuItem onChange={inputAudienceChangeHandler}>
-									<ListItemIcon>
-										<Lock
-											style={{
-												color: 'black',
-											}}
-										/>
-									</ListItemIcon>
-									<ListItemText>Only me</ListItemText>
-									<Typography
-										variant='body2'
-										color='text.secondary'
-									>
-										<Radio
-											value='onlyMe'
-											name='radio-buttons'
-											checked={
-												selectedAudienceValue ===
-												'Only me'
-											}
-										/>
-									</Typography>
-								</MenuItem>
-							</MenuList>
-						</DialogContent>
-					</div>
-				)} */}
             </Dialog>
         </div>
     );

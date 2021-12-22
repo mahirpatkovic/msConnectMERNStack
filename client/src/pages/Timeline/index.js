@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import Topbar from '../../components/Topbar';
 import Sidebar from '../../components/Sidebar';
@@ -13,10 +13,12 @@ function TimelinePage() {
     const [posts, setPosts] = useState([]);
     const [isSkeletonVisible, setIsSkeletonVisible] = useState(true);
     const currentUser = useSelector((state) => state.auth.currentUser);
+
+    let isMounted = useRef(true);
     useEffect(() => {
         const getTimeLinePosts = async () => {
             await Service.getTimelinePosts(currentUser._id).then((res) => {
-                if (res.data.status === 'success') {
+                if (isMounted.current && res.data.status === 'success') {
                     let dataArr = [];
                     for (let data of res.data.data) {
                         dataArr.unshift(data);
@@ -29,10 +31,16 @@ function TimelinePage() {
         };
 
         getTimeLinePosts();
+
+        return () => {
+            isMounted.current = false;
+        };
     }, [currentUser._id]);
+
     return (
         <div>
             <Topbar />
+
             <div className='main__body'>
                 <Sidebar />
 

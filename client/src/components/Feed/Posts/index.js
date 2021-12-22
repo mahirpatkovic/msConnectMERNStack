@@ -60,9 +60,8 @@ function Posts(props) {
                                 <img
                                     className='user__avatar post__avatar'
                                     src={
-                                        currentUser && currentUser.photo
-                                            ? publicFolder +
-                                              `profilePictures/${currentUser.photo}`
+                                        currentUser?.photo
+                                            ? currentUser.photo
                                             : publicFolder +
                                               `profilePictures/noAvatar.jpg`
                                     }
@@ -90,50 +89,71 @@ function Posts(props) {
                             )}
 
                             <div className='post__image'>
-                                <Swiper
-                                    className='swiper'
-                                    style={{
-                                        '--swiper-navigation-color': '#000',
-                                        '--swiper-pagination-color': '#000',
-                                    }}
-                                    zoom={true}
-                                    navigation={true}
-                                    pagination={{
-                                        clickable: true,
-                                    }}
-                                >
-                                    {/* `data:video/${file.type.substring(1)};base64, */}
-                                    {post.files.map((file, index) =>
+                                {post.files.length > 1 ? (
+                                    <Swiper
+                                        className='swiper'
+                                        style={{
+                                            '--swiper-navigation-color': '#000',
+                                            '--swiper-pagination-color': '#000',
+                                        }}
+                                        zoom={true}
+                                        navigation={true}
+                                        pagination={{
+                                            clickable: true,
+                                        }}
+                                    >
+                                        {/* `data:video/${file.type.substring(1)};base64, */}
+                                        {post.files.map((file, index) =>
+                                            file.type ===
+                                            ('.mp4' || '.MPEG-4' || '.mkv') ? (
+                                                <SwiperSlide
+                                                    className='swiperSlide'
+                                                    key={index}
+                                                >
+                                                    <div className='swiper-zoom-container'>
+                                                        <video
+                                                            width='100%'
+                                                            controls
+                                                            src={`${file.file}`}
+                                                        />
+                                                    </div>
+                                                </SwiperSlide>
+                                            ) : (
+                                                <SwiperSlide
+                                                    className='swiperSlide'
+                                                    key={index}
+                                                >
+                                                    <div className='swiper-zoom-container'>
+                                                        <img
+                                                            width='100%'
+                                                            src={`${file.file}`}
+                                                            alt=''
+                                                        />
+                                                    </div>
+                                                </SwiperSlide>
+                                            )
+                                        )}
+                                    </Swiper>
+                                ) : (
+                                    post.files.map((file, index) =>
                                         file.type ===
                                         ('.mp4' || '.MPEG-4' || '.mkv') ? (
-                                            <SwiperSlide
-                                                className='swiperSlide'
+                                            <video
+                                                width='100%'
+                                                controls
+                                                src={`${file.file}`}
                                                 key={index}
-                                            >
-                                                <div className='swiper-zoom-container'>
-                                                    <video
-                                                        width='100%'
-                                                        controls
-                                                        src={`${file.file}`}
-                                                    />
-                                                </div>
-                                            </SwiperSlide>
+                                            />
                                         ) : (
-                                            <SwiperSlide
-                                                className='swiperSlide'
+                                            <img
+                                                width='100%'
+                                                src={`${file.file}`}
+                                                alt=''
                                                 key={index}
-                                            >
-                                                <div className='swiper-zoom-container'>
-                                                    <img
-                                                        width='100%'
-                                                        src={`${file.file}`}
-                                                        alt=''
-                                                    />
-                                                </div>
-                                            </SwiperSlide>
+                                            />
                                         )
-                                    )}
-                                </Swiper>
+                                    )
+                                )}
                             </div>
 
                             <div className='post__options'>

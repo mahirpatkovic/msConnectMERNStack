@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     IconButton,
     Avatar,
@@ -8,46 +8,218 @@ import {
     Button,
     useMediaQuery,
     Divider,
+    MenuItem,
+    CircularProgress,
+    Backdrop,
 } from '@mui/material';
 import { Row, Col } from 'antd';
 import { useSelector } from 'react-redux';
-import { CameraAlt, AddCircle, Edit } from '@mui/icons-material';
+import {
+    CameraAlt,
+    AddCircle,
+    Edit,
+    AddPhotoAlternateOutlined,
+    FileUploadOutlined,
+    DeleteOutlineOutlined,
+} from '@mui/icons-material';
+import StyledMenu from './StyledMenu';
+import SelectCoverPhotoModal from '../SelectCoverPhotoModal';
+import Cropper from 'react-easy-crop';
+
 import './style.css';
 import 'antd/dist/antd.css';
+import Service from '../../../api/service';
 
-function Cover() {
+const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+function Cover(props) {
     const currentUser = useSelector((state) => state.auth.currentUser);
-    const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
+    const [isEditCoverMenuVisible, setIsEditCoverMenuVisible] = useState(null);
+    const [isSelectCoverModalVisible, setIsSelectCoverModalVisible] =
+        useState(false);
+    const [currentCoverPhoto, setCurrentCoverPhoto] = useState(
+        currentUser?.cover
+    );
+    const [isCoverEditCropperVisible, setIsCoverEditCropperVisible] =
+        useState(false);
+    const [isSaveCoverBarVisible, setIsSaveCoverBarVisible] = useState(false);
+    const [coverEditor, setCoverEditor] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+
     const isMobile = useMediaQuery('(max-width:576px)');
+
+    const handleOpenEditCoverMenu = (event) => {
+        setIsEditCoverMenuVisible(event.currentTarget);
+    };
+    const handleCloseEditCoverMenu = () => {
+        setIsEditCoverMenuVisible(null);
+    };
+
+    const handleOpenSelectCoverModal = () => {
+        setIsSelectCoverModalVisible(true);
+    };
+
+    const handleCloseSelectCoverModal = () => {
+        setIsSelectCoverModalVisible(false);
+    };
+
+    const onSelectCurrentCoverPhoto = (photoSrc) => {
+        setCurrentCoverPhoto(photoSrc);
+        setIsEditCoverMenuVisible(null);
+        setIsCoverEditCropperVisible(true);
+        setIsSaveCoverBarVisible(true);
+        setCoverEditor(photoSrc);
+    };
+
+    const saveCoverPhotoHandler = async () => {
+        if (coverEditor) {
+            if ((croppedAreaPixels.x || croppedAreaPixels.y) !== 0) {
+                setIsLoading(true);
+                await Service.updateCoverPhoto({
+                    croppedAreaPixels,
+                    image: coverEditor,
+                    userId: currentUser._id,
+                }).then((res) => {
+                    console.log(res);
+                    setIsCoverEditCropperVisible(false);
+                    setIsSaveCoverBarVisible(false);
+                    setCurrentCoverPhoto(res.data.currentUser.cover);
+                    setIsLoading(false);
+                });
+            } else {
+                setIsCoverEditCropperVisible(false);
+                setIsSaveCoverBarVisible(false);
+            }
+        }
+    };
+    const cancelCoverPhotoHandler = () => {
+        setCurrentCoverPhoto(currentUser?.cover);
+        setIsCoverEditCropperVisible(false);
+        setIsSaveCoverBarVisible(false);
+    };
+
+    const onCropCoverImageComplete = (croppedArea, croppedAreaPixels) => {
+        setCroppedAreaPixels(croppedAreaPixels);
+    };
+
     return (
         <div className='coverBar'>
-            <div className='coverImage'>
-                <img
-                    src={
-                        currentUser && currentUser.cover
-                            ? publicFolder + `covers/${currentUser.cover}`
-                            : publicFolder + `covers/noCover.jpg`
-                    }
-                    alt=''
-                />
-                <Button
-                    variant='contained'
-                    color='primary'
-                    startIcon={<CameraAlt />}
-                    style={{
-                        marginTop: -100,
-                        textTransform: 'none',
-                        backgroundColor: 'white',
-                        color: 'black',
-                        marginLeft: isMobile ? '65%' : '75%',
-                        fontWeight: 'bold',
-                    }}
-                >
-                    Edit Photo
-                </Button>
-            </div>
-
-            <div className='profileBar'>
+            <Backdrop
+                sx={{
+                    color: '#fff',
+                    zIndex: (theme) => theme.zIndex.drawer + 1,
+                }}
+                open={isLoading}
+            >
+                <CircularProgress color='inherit' />
+            </Backdrop>
+            {isSaveCoverBarVisible && (
+                <div className='saveCoverBar'>
+                    <Stack
+                        direction='row'
+                        spacing={2}
+                        justifyContent='flex-end'
+                        style={{ zIndex: 3 }}
+                    >
+                        <Button
+                            variant='contained'
+                            style={{
+                                textTransform: 'none',
+                                fontWeight: 'bold',
+                                backgroundColor: '#bbb',
+                            }}
+                            onClick={cancelCoverPhotoHandler}
+                        >
+                            Cancel
+                        </Button>
+                        <Button
+                            variant='contained'
+                            style={{
+                                textTransform: 'none',
+                                backgroundColor: '#2e81f4',
+                                fontWeight: 'bold',
+                            }}
+                            onClick={saveCoverPhotoHandler}
+                        >
+                            Save Changes
+                        </Button>
+                    </Stack>
+                </div>
+            )}
+            {isCoverEditCropperVisible ? (
+                <div className='cropContainer'>
+                    <Cropper
+                        image={currentCoverPhoto}
+                        crop={crop}
+                        zoom={zoom}
+                        aspect={16 / 9}
+                        onCropChange={setCrop}
+                        onCropComplete={onCropCoverImageComplete}
+                        onZoomChange={setZoom}
+                        showGrid={false}
+                    />
+                </div>
+            ) : (
+                <div className='coverImage'>
+                    <img
+                        src={
+                            currentUser?.cover
+                                ? currentCoverPhoto
+                                : publicFolder + `covers/noCover.jpg`
+                        }
+                        alt=''
+                        // width={currentCoverPhotoDimensions.width}
+                        // height={currentCoverPhotoDimensions.height}
+                    />
+                    <Button
+                        variant='contained'
+                        color='primary'
+                        startIcon={<CameraAlt />}
+                        style={{
+                            marginTop: -100,
+                            textTransform: 'none',
+                            backgroundColor: 'white',
+                            color: 'black',
+                            marginLeft: isMobile ? '65%' : '75%',
+                            fontWeight: 'bold',
+                        }}
+                        onClick={handleOpenEditCoverMenu}
+                    >
+                        Edit Photo
+                    </Button>
+                    <StyledMenu
+                        anchorEl={isEditCoverMenuVisible}
+                        open={Boolean(isEditCoverMenuVisible)}
+                        onClose={handleCloseEditCoverMenu}
+                    >
+                        <MenuItem
+                            disableRipple
+                            onClick={handleOpenSelectCoverModal}
+                        >
+                            <AddPhotoAlternateOutlined />
+                            Select photo
+                        </MenuItem>
+                        <MenuItem disableRipple>
+                            <FileUploadOutlined />
+                            Upload photo
+                        </MenuItem>
+                        <Divider sx={{ my: 0.5 }} />
+                        <MenuItem disableRipple>
+                            <DeleteOutlineOutlined />
+                            Remove
+                        </MenuItem>
+                    </StyledMenu>
+                </div>
+            )}
+            <div
+                className={
+                    isCoverEditCropperVisible
+                        ? 'profileBarWithCropper'
+                        : 'profileBar'
+                }
+            >
                 <Row>
                     <Col
                         md={{ span: 5, offset: 1 }}
@@ -76,9 +248,8 @@ function Cover() {
                         >
                             <img
                                 src={
-                                    currentUser && currentUser.photo
-                                        ? publicFolder +
-                                          `profilePictures/${currentUser.photo}`
+                                    currentUser?.photo
+                                        ? currentUser.photo
                                         : publicFolder +
                                           `profilePictures/noAvatar.jpg`
                                 }
@@ -108,9 +279,8 @@ function Cover() {
                                 <Avatar
                                     alt='Remy Sharp'
                                     src={
-                                        currentUser && currentUser.photo
-                                            ? publicFolder +
-                                              `profilePictures/${currentUser.photo}`
+                                        currentUser?.photo
+                                            ? currentUser.photo
                                             : publicFolder +
                                               `profilePictures/noAvatar.jpg`
                                     }
@@ -118,9 +288,8 @@ function Cover() {
                                 <Avatar
                                     alt='Travis Howard'
                                     src={
-                                        currentUser && currentUser.photo
-                                            ? publicFolder +
-                                              `profilePictures/${currentUser.photo}`
+                                        currentUser?.photo
+                                            ? currentUser.photo
                                             : publicFolder +
                                               `profilePictures/noAvatar.jpg`
                                     }
@@ -128,9 +297,8 @@ function Cover() {
                                 <Avatar
                                     alt='Cindy Baker'
                                     src={
-                                        currentUser && currentUser.photo
-                                            ? publicFolder +
-                                              `profilePictures/${currentUser.photo}`
+                                        currentUser?.photo
+                                            ? currentUser.photo
                                             : publicFolder +
                                               `profilePictures/noAvatar.jpg`
                                     }
@@ -138,9 +306,8 @@ function Cover() {
                                 <Avatar
                                     alt='Agnes Walker'
                                     src={
-                                        currentUser && currentUser.photo
-                                            ? publicFolder +
-                                              `profilePictures/${currentUser.photo}`
+                                        currentUser?.photo
+                                            ? currentUser.photo
                                             : publicFolder +
                                               `profilePictures/noAvatar.jpg`
                                     }
@@ -148,9 +315,8 @@ function Cover() {
                                 <Avatar
                                     alt='Trevor Henderson'
                                     src={
-                                        currentUser && currentUser.photo
-                                            ? publicFolder +
-                                              `profilePictures/${currentUser.photo}`
+                                        currentUser?.photo
+                                            ? currentUser.photo
                                             : publicFolder +
                                               `profilePictures/noAvatar.jpg`
                                     }
@@ -205,28 +371,14 @@ function Cover() {
                 }}
                 textAlign='center'
             />
-            {/* <div className='crop-container'>
-                <Cropper
-                    image='https://img.huffingtonpost.com/asset/5ab4d4ac2000007d06eb2c56.jpeg?cache=sih0jwle4e&ops=1910_1000'
-                    crop={crop}
-                    zoom={zoom}
-                    aspect={4 / 3}
-                    onCropChange={setCrop}
-                    onCropComplete={onCropComplete}
-                    onZoomChange={setZoom}
+
+            {isSelectCoverModalVisible && (
+                <SelectCoverPhotoModal
+                    visible={isSelectCoverModalVisible}
+                    onClose={handleCloseSelectCoverModal}
+                    onSelectCover={onSelectCurrentCoverPhoto}
                 />
-            </div>
-            <div className='controls'>
-                <Slider
-                    value={zoom}
-                    min={1}
-                    max={3}
-                    step={0.1}
-                    aria-labelledby='Zoom'
-                    onChange={(e, zoom) => setZoom(zoom)}
-                    classes={{ root: 'slider' }}
-                />
-            </div> */}
+            )}
         </div>
     );
 }

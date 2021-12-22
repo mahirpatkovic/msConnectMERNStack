@@ -6,12 +6,7 @@ const router = express.Router();
 
 router.use(authController.protect);
 
-router.post(
-    '/',
-    postController.uploadFiles,
-    // postController.resizeUploadImages,
-    postController.createPost
-);
+router.post('/', postController.uploadFiles, postController.createPost);
 
 router.get('/timeline/:userId', postController.getTimelinePosts);
 

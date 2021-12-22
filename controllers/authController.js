@@ -6,6 +6,13 @@ const { promisify } = require('util');
 const catchAsync = require('../utils/catchAsync');
 // const AppError = require('../utils/appError');
 const validator = require('validator');
+const aws = require('aws-sdk');
+const awsS3 = new aws.S3({
+    accessKeyId: process.env.AWS_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    region: process.env.AWS_REGION,
+});
+const bucketName = process.env.AWS_BUCKET_NAME;
 
 const signToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -81,13 +88,41 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // 2) Check if user exists && password is correct
-    const user = await User.findOne({ email }).select('+password');
+    let user = await User.findOne({ email }).select('+password');
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
         return res.status(400).json({
             message: 'Incorrect email or password!',
         });
     }
+    // const userCoverPhoto = await awsS3.getSignedUrlPromise('getObject', {
+    //     Bucket: `${bucketName}/uploads-${user._id}`,
+    //     Key: user.cover.split('/')[1],
+    //     Expires: 3600,
+    // });
+    // user.cover = userCoverPhoto;
+    let userCloudData = [];
+
+    if (user.cover || user.photo) {
+        const userArr = [user.cover, user.photo];
+        let params = [];
+        userArr.forEach((data, i) => {
+            params.push({
+                Bucket: `${bucketName}/${data.split('/')[0]}`,
+                Key: `${data.split('/')[1]}`, // File name you want to save as in S3
+                Expires: 3600,
+            });
+        });
+        userCloudData = await Promise.all(
+            params.map((param) =>
+                awsS3
+                    .getSignedUrlPromise('getObject', param)
+                    .then((data) => data)
+            )
+        );
+    }
+    user.cover = userCloudData[0];
+    user.photo = userCloudData[1];
 
     // 3) If everything ok, send token to client
     createSendToken(user, 200, req, res);
@@ -126,6 +161,29 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
         );
         return decoded.iat < changedTimestamp;
     }
+
+    let userCloudData = [];
+
+    if (currentUser.cover || currentUser.photo) {
+        const userArr = [currentUser.cover, currentUser.photo];
+        let params = [];
+        userArr.forEach((data, i) => {
+            params.push({
+                Bucket: `${bucketName}/${data.split('/')[0]}`,
+                Key: `${data.split('/')[1]}`, // File name you want to save as in S3
+                Expires: 3600,
+            });
+        });
+        userCloudData = await Promise.all(
+            params.map((param) =>
+                awsS3
+                    .getSignedUrlPromise('getObject', param)
+                    .then((data) => data)
+            )
+        );
+    }
+    currentUser.cover = userCloudData[0];
+    currentUser.photo = userCloudData[1];
     createSendToken(currentUser, 202, req, res);
 
     // next();

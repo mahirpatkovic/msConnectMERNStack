@@ -1,6 +1,7 @@
 const express = require('express');
 const userRouter = require('./routes/userRoutes');
 const postRouter = require('./routes/postRoutes');
+const imageRouter = require('./routes/imageRoutes');
 const path = require('path');
 const multer = require('multer');
 const cors = require('cors');
@@ -31,6 +32,7 @@ app.options('*', cors());
 
 app.use('/api/users', userRouter);
 app.use('/api/posts', postRouter);
+app.use('/api/images', imageRouter);
 
 app.use(function (err, req, res, next) {
     // Check if the error is thrown from multer
@@ -55,8 +57,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(express.static(path.join(__dirname, '/client/build')));
 
-// app.get('*', (req, res) => {
-//     res.sendFile(path.join(__dirname, '/client/build', 'index.html'));
-// });
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/client/build', 'index.html'));
+});
 
 module.exports = app;

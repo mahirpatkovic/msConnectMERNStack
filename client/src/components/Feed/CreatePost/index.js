@@ -43,8 +43,7 @@ function CreatePost() {
                     className='user__avatar'
                     src={
                         currentUser?.photo
-                            ? publicFolder +
-                              `profilePictures/${currentUser.photo}`
+                            ? currentUser.photo
                             : publicFolder + `profilePictures/noAvatar.jpg`
                     }
                     alt='profilePicture'
