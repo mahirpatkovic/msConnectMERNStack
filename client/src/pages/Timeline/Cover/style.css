@@ -1,5 +1,5 @@
 .coverBar {
-    margin-top: -80px;
+    margin-top: -70px;
 }
 .coverImage img {
     max-width: 100%;
@@ -107,6 +107,9 @@
     }
     .profileBarWithCropper {
         margin-top: 220px;
+    }
+    .coverBar {
+        margin-top: -30px;
     }
 }
 

@@ -15,6 +15,7 @@ function TimelinePage() {
     const currentUser = useSelector((state) => state.auth.currentUser);
 
     let isMounted = useRef(true);
+
     useEffect(() => {
         const getTimeLinePosts = async () => {
             await Service.getTimelinePosts(currentUser._id).then((res) => {

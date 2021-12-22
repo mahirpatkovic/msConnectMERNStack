@@ -42,6 +42,14 @@ function CreatePostModal(props) {
     const [files, setFiles] = useState([]);
     const [selectedAudienceValue, setSelectedAudienceValue] =
         useState('Only me');
+    const [selectedAudienceIcon, setSelectedAudienceIcon] = useState(
+        <Lock
+            style={{
+                fontSize: 18,
+                marginLeft: 5,
+            }}
+        />
+    );
     const [isAddPhotoAreaVisible, setIsAddPhotoAreaVisible] = useState(true);
     const [postValues, setPostValues] = useState({
         description: '',
@@ -108,12 +116,36 @@ function CreatePostModal(props) {
         switch (value) {
             case 'public':
                 setSelectedAudienceValue('Public');
+                setSelectedAudienceIcon(
+                    <Public
+                        style={{
+                            fontSize: 18,
+                            marginLeft: 5,
+                        }}
+                    />
+                );
                 break;
             case 'friends':
                 setSelectedAudienceValue('Friends');
+                setSelectedAudienceIcon(
+                    <Group
+                        style={{
+                            fontSize: 18,
+                            marginLeft: 5,
+                        }}
+                    />
+                );
                 break;
             case 'onlyMe':
                 setSelectedAudienceValue('Only me');
+                setSelectedAudienceIcon(
+                    <Lock
+                        style={{
+                            fontSize: 18,
+                            marginLeft: 5,
+                        }}
+                    />
+                );
                 break;
             default:
                 break;
@@ -128,12 +160,16 @@ function CreatePostModal(props) {
     };
 
     const createPostHandler = () => {
-        if (files.length > 0 && files.length < 5) {
+        if (postValues.description || files.length > 0) {
             setIsLoading(true);
             let formData = new FormData();
-
-            for (let file of files) {
-                formData.append('files', file);
+            if (files.length < 5) {
+                for (let file of files) {
+                    formData.append('files', file);
+                }
+            } else {
+                setIsAlertVisible(true);
+                setErrorMessage('Maximum 4 files per post');
             }
 
             formData.append('description', postValues.description);
@@ -152,7 +188,7 @@ function CreatePostModal(props) {
             // console.log(files);
         } else {
             setIsAlertVisible(true);
-            setErrorMessage('Please upload file first');
+            setErrorMessage('Write something or upload image/video');
         }
     };
     return (
@@ -244,12 +280,7 @@ function CreatePostModal(props) {
                                     className='postViewDetails'
                                     onClick={openPostViewModalHandler}
                                 >
-                                    <Lock
-                                        style={{
-                                            fontSize: 15,
-                                            marginLeft: 5,
-                                        }}
-                                    />
+                                    {selectedAudienceIcon}
                                     <h4>{selectedAudienceValue}</h4>
                                     <ArrowDropDown style={{ fontSize: 17 }} />
                                 </div>

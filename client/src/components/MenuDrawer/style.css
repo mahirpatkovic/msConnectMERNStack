@@ -31,16 +31,16 @@
     background-color: #ddd;
     border-radius: 10px;
 }
-.menuRow.active h3 {
+.menuRow.active h4 {
     color: #2e81f4;
 }
-.menuRow h3 {
+.menuRow h4 {
     margin-left: 20px;
     font-weight: 600;
     color: black;
     margin-top: 8px;
 }
 .menuRow .material-icons {
-    font-size: xx-large;
+    font-size: x-large;
     color: #2e81f4;
 }

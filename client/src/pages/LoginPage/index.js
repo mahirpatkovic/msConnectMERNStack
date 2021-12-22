@@ -61,7 +61,6 @@ const Login = () => {
         await Service.login(userValues)
             .then((res) => {
                 if (isMounted.current && res.status === 200) {
-                    console.log(res);
                     dispatch(authActions.login());
                     dispatch(authActions.setUser(res.data.user));
                     Cookies.set('token', `${res.data.token}`, {
