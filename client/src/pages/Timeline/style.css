@@ -45,4 +45,7 @@
         max-width: 75%;
         padding: 10px 50px;
     }
+    .cover {
+        max-width: 75%;
+    }
 }

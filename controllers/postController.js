@@ -2,7 +2,7 @@ const Post = require('../models/postModel');
 const multer = require('multer');
 const catchAsync = require('../utils/catchAsync');
 const path = require('path');
-const sharp = require('sharp');
+// const sharp = require('sharp');
 const aws = require('aws-sdk');
 const awsS3 = new aws.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
@@ -28,24 +28,6 @@ const fileUpload = multer({
 });
 
 exports.uploadFiles = fileUpload.array('files', 4);
-
-// exports.resizeUploadImages = catchAsync(async (req, res, next) => {
-// 	if (req.files) {
-// 		await Promise.all(
-// 			req.files.map(async (file, i) => {
-// 				if (file.mimetype.startsWith('image')) {
-// 					sharp(file.buffer)
-// 						.resize(1200, 630)
-// 						.toFormat('jpeg')
-// 						.jpeg({ quality: 90 });
-// 				}
-// 			})
-// 		);
-// 		next();
-// 	} else {
-// 		next();
-// 	}
-// });
 
 exports.createPost = catchAsync(async (req, res, next) => {
     const { user, description, visible } = req.body;

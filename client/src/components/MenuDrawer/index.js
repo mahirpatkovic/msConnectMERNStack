@@ -125,9 +125,8 @@ function MenuDrawer(props) {
                 <div className='profile__avatar'>
                     <img
                         src={
-                            currentUser && currentUser.photo
-                                ? publicFolder +
-                                  `profilePictures/${currentUser.photo}`
+                            currentUser?.photo
+                                ? currentUser.photo
                                 : publicFolder + `profilePictures/noAvatar.jpg`
                         }
                         alt='profilePicture'

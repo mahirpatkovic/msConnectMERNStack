@@ -61,22 +61,27 @@ const Login = () => {
         await Service.login(userValues)
             .then((res) => {
                 if (isMounted.current && res.status === 200) {
+                    console.log(res);
                     dispatch(authActions.login());
                     dispatch(authActions.setUser(res.data.user));
-                    Cookies.set('token', `${res.data.token}`, { expires: 1 });
+                    Cookies.set('token', `${res.data.token}`, {
+                        expires: 1,
+                    });
                     setIsLoading(false);
                 } else {
                     setErrorMessage('error');
                 }
             })
             .catch((err) => {
-                setIsAlertVisible(true);
-                setErrorMessage(
-                    err.response
-                        ? err.response.data.message
-                        : 'Connection to server has failed!'
-                );
-                setIsLoading(false);
+                if (isMounted.current) {
+                    setIsAlertVisible(true);
+                    setErrorMessage(
+                        err.response
+                            ? err.response.data.message
+                            : 'Connection to server failed!'
+                    );
+                    setIsLoading(false);
+                }
             });
     };
 
