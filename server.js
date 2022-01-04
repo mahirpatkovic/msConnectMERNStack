@@ -14,7 +14,7 @@ mongoose
         console.log('Connected to MongoDB');
     })
     .catch((err) => {
-        console.log(err);
+        console.log('Cannot connect to MongoDB', err);
     });
 
 const port = process.env.PORT || 8800;

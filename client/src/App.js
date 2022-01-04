@@ -19,7 +19,7 @@ function App() {
                 await Service.userAuthenticated()
                     .then((res) => {
                         dispatch(authActions.login());
-                        dispatch(authActions.setUser(res.data.user));
+                        dispatch(authActions.setCurrentUser(res.data.user));
                         Cookies.set('token', `${res.data.token}`, {
                             expires: 1,
                         });

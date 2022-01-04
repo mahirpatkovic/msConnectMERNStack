@@ -33,10 +33,7 @@ function Sidebar() {
                     }
                     alt='profilePicture'
                 />
-                <h4>
-                    {currentUser &&
-                        `${currentUser.firstName} ${currentUser.lastName}`}
-                </h4>
+                <h4>{`${currentUser?.firstName} ${currentUser?.lastName}`}</h4>
             </NavLink>
             {/* <div className="sidebarRow">
                 <LocalHospital className="material-icons" />

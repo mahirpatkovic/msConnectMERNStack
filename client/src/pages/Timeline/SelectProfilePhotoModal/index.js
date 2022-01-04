@@ -11,7 +11,7 @@ import {
 import { Close } from '@mui/icons-material';
 import Service from '../../../api/service';
 
-function SelectCoverPhotoModal(props) {
+function SelectProfilePhotoModal(props) {
     const [userImages, setUserImages] = useState([]);
     const currentUser = useSelector((state) => state.auth.currentUser);
 
@@ -31,8 +31,8 @@ function SelectCoverPhotoModal(props) {
         };
     }, [currentUser._id]);
 
-    const selectCoverPhotoHandler = (photoSrc) => {
-        props.onSelectCover(photoSrc);
+    const selectProfilePhotoHandler = (photoSrc) => {
+        props.onSelectProfile(photoSrc);
         props.onClose();
     };
     return (
@@ -74,7 +74,7 @@ function SelectCoverPhotoModal(props) {
                                 alt='user Pictures'
                                 loading='lazy'
                                 style={{ cursor: 'pointer' }}
-                                onClick={() => selectCoverPhotoHandler(item)}
+                                onClick={() => selectProfilePhotoHandler(item)}
                             />
                         </ImageListItem>
                     ))}
@@ -84,4 +84,4 @@ function SelectCoverPhotoModal(props) {
     );
 }
 
-export default SelectCoverPhotoModal;
+export default SelectProfilePhotoModal;

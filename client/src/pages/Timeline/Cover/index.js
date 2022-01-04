@@ -31,6 +31,8 @@ import { authActions } from '../../../store/auth';
 import './style.css';
 import 'antd/dist/antd.css';
 import Service from '../../../api/service';
+import SelectProfilePhotoModal from '../SelectProfilePhotoModal';
+import ProfilePhotoModal from '../ProfilePhotoModal';
 
 const publicFolder = process.env.REACT_APP_PUBLIC_FOLDER;
 function Cover(props) {
@@ -50,6 +52,13 @@ function Cover(props) {
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
 
+    const [isEditProfileMenuVisible, setIsEditProfileMenuVisible] =
+        useState(null);
+    const [isSelectProfileModalVisible, setIsSelectProfileModalVisible] =
+        useState(false);
+    const [editableProfilePhoto, setEditableProfilePhoto] = useState();
+    const [isEditProfilePhotoModalVisible, setIsEditProfilePhotoModalVisible] =
+        useState(false);
     const isMobile = useMediaQuery('(max-width:576px)');
     const dispatch = useDispatch();
 
@@ -66,6 +75,7 @@ function Cover(props) {
 
     const handleCloseSelectCoverModal = () => {
         setIsSelectCoverModalVisible(false);
+        setIsEditCoverMenuVisible(null);
     };
 
     const onSelectCurrentCoverPhoto = (photoSrc) => {
@@ -77,6 +87,11 @@ function Cover(props) {
     };
 
     const saveCoverPhotoHandler = async () => {
+        // await Service.updateCoverPhoto({
+        //     croppedAreaPixels,
+        //     image: coverEditor,
+        //     userId: currentUser._id,
+        // });
         if (coverEditor) {
             if ((croppedAreaPixels.x || croppedAreaPixels.y) !== 0) {
                 setIsLoading(true);
@@ -107,6 +122,32 @@ function Cover(props) {
 
     const onCropCoverImageComplete = (croppedArea, croppedAreaPixels) => {
         setCroppedAreaPixels(croppedAreaPixels);
+    };
+
+    const handleOpenEditProfileMenu = (event) => {
+        setIsEditProfileMenuVisible(event.currentTarget);
+    };
+    const handleCloseEditProfileMenu = () => {
+        setIsEditProfileMenuVisible(null);
+    };
+
+    const handleOpenSelectProfileModal = () => {
+        setIsSelectProfileModalVisible(true);
+    };
+
+    const handleCloseSelectProfileModal = () => {
+        setIsSelectProfileModalVisible(false);
+        setIsEditProfileMenuVisible(null);
+    };
+
+    const onSelectCurrentProfilePhoto = (photoSrc) => {
+        setEditableProfilePhoto(photoSrc);
+        setIsEditProfileMenuVisible(null);
+        setIsEditProfilePhotoModalVisible(true);
+    };
+
+    const handleCloseProfilePhotoModal = () => {
+        setIsEditProfilePhotoModalVisible(false);
     };
 
     return (
@@ -178,22 +219,40 @@ function Cover(props) {
                         // width={currentCoverPhotoDimensions.width}
                         // height={currentCoverPhotoDimensions.height}
                     />
-                    <Button
-                        variant='contained'
-                        color='primary'
-                        startIcon={<CameraAlt />}
-                        style={{
-                            marginTop: -100,
-                            textTransform: 'none',
-                            backgroundColor: 'white',
-                            color: 'black',
-                            marginLeft: isMobile ? '65%' : '75%',
-                            fontWeight: 'bold',
-                        }}
-                        onClick={handleOpenEditCoverMenu}
-                    >
-                        Edit Photo
-                    </Button>
+                    {isMobile ? (
+                        <IconButton
+                            aria-label='add photo'
+                            size='small'
+                            style={{
+                                color: 'black',
+                                backgroundColor: 'white',
+                                float: 'right',
+                                marginTop: '32%',
+                                marginRight: 10,
+                            }}
+                            className='profileBtn'
+                            onClick={handleOpenEditCoverMenu}
+                        >
+                            <CameraAlt />
+                        </IconButton>
+                    ) : (
+                        <Button
+                            variant='contained'
+                            color='primary'
+                            startIcon={<CameraAlt />}
+                            style={{
+                                marginTop: -100,
+                                textTransform: 'none',
+                                backgroundColor: 'white',
+                                color: 'black',
+                                marginLeft: '75%',
+                                fontWeight: 'bold',
+                            }}
+                            onClick={handleOpenEditCoverMenu}
+                        >
+                            Edit Photo
+                        </Button>
+                    )}
                     <StyledMenu
                         anchorEl={isEditCoverMenuVisible}
                         open={Boolean(isEditCoverMenuVisible)}
@@ -243,8 +302,10 @@ function Cover(props) {
                                     size='small'
                                     style={{
                                         color: 'black',
+                                        backgroundColor: 'white',
                                     }}
                                     className='profileBtn'
+                                    onClick={handleOpenEditProfileMenu}
                                 >
                                     <CameraAlt />
                                 </IconButton>
@@ -264,8 +325,30 @@ function Cover(props) {
                                         ' ' +
                                         currentUser.lastName
                                 }`}
-                            />{' '}
+                            />
                         </Badge>
+                        <StyledMenu
+                            anchorEl={isEditProfileMenuVisible}
+                            open={Boolean(isEditProfileMenuVisible)}
+                            onClose={handleCloseEditProfileMenu}
+                        >
+                            <MenuItem
+                                disableRipple
+                                onClick={handleOpenSelectProfileModal}
+                            >
+                                <AddPhotoAlternateOutlined />
+                                Select photo
+                            </MenuItem>
+                            <MenuItem disableRipple>
+                                <FileUploadOutlined />
+                                Upload photo
+                            </MenuItem>
+                            <Divider sx={{ my: 0.5 }} />
+                            <MenuItem disableRipple>
+                                <DeleteOutlineOutlined />
+                                Remove
+                            </MenuItem>
+                        </StyledMenu>
                     </Col>
                     <Col
                         md={{ span: 6, offset: 1 }}
@@ -382,6 +465,20 @@ function Cover(props) {
                     visible={isSelectCoverModalVisible}
                     onClose={handleCloseSelectCoverModal}
                     onSelectCover={onSelectCurrentCoverPhoto}
+                />
+            )}
+            {isSelectProfileModalVisible && (
+                <SelectProfilePhotoModal
+                    visible={isSelectProfileModalVisible}
+                    onClose={handleCloseSelectProfileModal}
+                    onSelectProfile={onSelectCurrentProfilePhoto}
+                />
+            )}
+            {isEditProfilePhotoModalVisible && (
+                <ProfilePhotoModal
+                    visible={isEditProfilePhotoModalVisible}
+                    onClose={handleCloseProfilePhotoModal}
+                    selectedProfilePhoto={editableProfilePhoto}
                 />
             )}
         </div>

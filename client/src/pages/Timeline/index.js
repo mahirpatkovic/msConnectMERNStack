@@ -18,17 +18,19 @@ function TimelinePage() {
 
     useEffect(() => {
         const getTimeLinePosts = async () => {
-            await Service.getTimelinePosts(currentUser._id).then((res) => {
-                if (isMounted.current && res.data.status === 'success') {
-                    let dataArr = [];
-                    for (let data of res.data.data) {
-                        dataArr.unshift(data);
+            if (currentUser) {
+                await Service.getTimelinePosts(currentUser._id).then((res) => {
+                    if (isMounted.current && res.data.status === 'success') {
+                        let dataArr = [];
+                        for (let data of res.data.data) {
+                            dataArr.unshift(data);
+                        }
+                        setPosts(dataArr);
                     }
-                    setPosts(dataArr);
-                }
 
-                setIsSkeletonVisible(false);
-            });
+                    setIsSkeletonVisible(false);
+                });
+            }
         };
 
         getTimeLinePosts();
@@ -36,7 +38,7 @@ function TimelinePage() {
         return () => {
             isMounted.current = false;
         };
-    }, [currentUser._id]);
+    }, [currentUser, currentUser._id]);
 
     return (
         <div>

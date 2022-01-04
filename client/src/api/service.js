@@ -60,6 +60,14 @@ class Service {
             this.reqConfig()
         );
     }
+
+    static updateProfilePhoto(reqData) {
+        return axios.patch(
+            ENV.apiBase + '/users/updateProfilePhoto',
+            reqData,
+            this.reqConfig()
+        );
+    }
 }
 
 export default Service;
