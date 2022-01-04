@@ -40,7 +40,7 @@ const Login = () => {
         return () => {
             isMounted.current = false;
         };
-    }, []);
+    }, [isMounted]);
 
     const handleInputChange = (val) => (event) => {
         setUserValues({ ...userValues, [val]: event.target.value });
@@ -62,7 +62,7 @@ const Login = () => {
             .then((res) => {
                 if (isMounted.current && res.status === 200) {
                     dispatch(authActions.login());
-                    dispatch(authActions.setUser(res.data.user));
+                    dispatch(authActions.setCurrentUser(res.data.user));
                     Cookies.set('token', `${res.data.token}`, {
                         expires: 1,
                     });

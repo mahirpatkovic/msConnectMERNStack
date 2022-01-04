@@ -16,11 +16,14 @@ const authSlice = createSlice({
             state.isAuthenticated = false;
             state.currentUser = {};
         },
-        setUser(state, action) {
+        setCurrentUser(state, action) {
             state.currentUser = action.payload;
         },
         setUserCover(state, action) {
             state.currentUser.cover = action.payload;
+        },
+        setUserProfile(state, action) {
+            state.currentUser.photo = action.payload;
         },
     },
 });

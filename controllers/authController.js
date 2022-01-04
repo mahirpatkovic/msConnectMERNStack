@@ -103,26 +103,23 @@ exports.login = catchAsync(async (req, res, next) => {
     // user.cover = userCoverPhoto;
     let userCloudData = [];
 
-    if (user.cover || user.photo) {
-        const userArr = [user.cover, user.photo];
-        let params = [];
-        userArr.forEach((data, i) => {
-            params.push({
-                Bucket: `${bucketName}/${data.split('/')[0]}`,
-                Key: `${data.split('/')[1]}`, // File name you want to save as in S3
-                Expires: 3600,
-            });
+    const userArr = [user.cover, user.photo];
+    let params = [];
+    userArr.forEach((data, i) => {
+        params.push({
+            Bucket: `${bucketName}/${data.split('/')[0]}`,
+            Key: `${data.split('/')[1]}`, // File name you want to save as in S3
+            Expires: 3600,
         });
-        userCloudData = await Promise.all(
-            params.map((param) =>
-                awsS3
-                    .getSignedUrlPromise('getObject', param)
-                    .then((data) => data)
-            )
-        );
-    }
-    user.cover = userCloudData[0];
-    user.photo = userCloudData[1];
+    });
+    userCloudData = await Promise.all(
+        params.map((param) =>
+            awsS3.getSignedUrlPromise('getObject', param).then((data) => data)
+        )
+    );
+
+    user.cover = user.cover ? userCloudData[0] : '';
+    user.photo = user.photo ? userCloudData[1] : '';
 
     // 3) If everything ok, send token to client
     createSendToken(user, 200, req, res);
@@ -164,26 +161,23 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
 
     let userCloudData = [];
 
-    if (currentUser.cover || currentUser.photo) {
-        const userArr = [currentUser.cover, currentUser.photo];
-        let params = [];
-        userArr.forEach((data, i) => {
-            params.push({
-                Bucket: `${bucketName}/${data.split('/')[0]}`,
-                Key: `${data.split('/')[1]}`, // File name you want to save as in S3
-                Expires: 3600,
-            });
+    const userArr = [currentUser.cover, currentUser.photo];
+    let params = [];
+    userArr.forEach((data, i) => {
+        params.push({
+            Bucket: `${bucketName}/${data.split('/')[0]}`,
+            Key: `${data.split('/')[1]}`, // File name you want to save as in S3
+            Expires: 3600,
         });
-        userCloudData = await Promise.all(
-            params.map((param) =>
-                awsS3
-                    .getSignedUrlPromise('getObject', param)
-                    .then((data) => data)
-            )
-        );
-    }
-    currentUser.cover = userCloudData[0];
-    currentUser.photo = userCloudData[1];
+    });
+    userCloudData = await Promise.all(
+        params.map((param) =>
+            awsS3.getSignedUrlPromise('getObject', param).then((data) => data)
+        )
+    );
+    currentUser.cover = currentUser.cover ? userCloudData[0] : '';
+    currentUser.photo = currentUser.photo ? userCloudData[1] : '';
+
     createSendToken(currentUser, 202, req, res);
 
     // next();

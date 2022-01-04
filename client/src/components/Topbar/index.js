@@ -137,7 +137,9 @@ function Topbar() {
                             }
                             alt='profilePicture'
                         />
-                        <h4>{currentUser && currentUser.firstName}</h4>
+                        <h4>
+                            {currentUser?.firstName && currentUser.firstName}
+                        </h4>
                     </NavLink>
                 )}
 

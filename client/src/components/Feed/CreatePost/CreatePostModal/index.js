@@ -21,7 +21,7 @@ import {
     CircularProgress,
 } from '@mui/material';
 import {
-    CancelOutlined,
+    Close,
     Lock,
     ArrowDropDown,
     AddPhotoAlternateOutlined,
@@ -228,11 +228,14 @@ function CreatePostModal(props) {
                                 </h3>
                             </Grid>
                             <Grid item xs={1}>
-                                <CancelOutlined
+                                <Close
                                     style={{
                                         color: 'gray',
                                         cursor: 'pointer',
-                                        marginTop: 7,
+                                        backgroundColor: 'lightGray',
+                                        borderRadius: 50,
+                                        fontSize: 30,
+                                        marginTop: 3,
                                     }}
                                     onClick={props.onClose}
                                 />
@@ -370,10 +373,13 @@ function CreatePostModal(props) {
                             />
                             {isAddPhotoAreaVisible && (
                                 <div>
-                                    <Cancel
+                                    <Close
                                         style={{
-                                            cursor: 'pointer',
                                             float: 'right',
+                                            color: 'gray',
+                                            cursor: 'pointer',
+                                            backgroundColor: 'lightGray',
+                                            borderRadius: 50,
                                         }}
                                         onClick={hideAddPhotoAreaHandler}
                                     />
