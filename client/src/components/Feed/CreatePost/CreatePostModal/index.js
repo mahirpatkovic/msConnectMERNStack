@@ -67,7 +67,7 @@ function CreatePostModal(props) {
     }, [files]);
 
     const { getRootProps, getInputProps } = useDropzone({
-        accept: ['image/*', 'video/*'],
+        accept: '.jpeg,.png, .jpg, .gif, .mp4, .MPEG-4, .mkv',
         onDrop: (acceptedFiles) => {
             acceptedFiles.map((file, i) =>
                 Object.assign(file, {

@@ -1,10 +1,8 @@
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
-const axios = require('axios');
 const path = require('path');
 const sharp = require('sharp');
 const jimp = require('jimp');
-const jo = require('jpeg-autorotate');
 
 const aws = require('aws-sdk');
 const awsS3 = new aws.S3({
@@ -60,14 +58,17 @@ exports.updateCoverPhoto = catchAsync(async (req, res, next) => {
         Body: croppedImage,
     };
 
+    if (currentUser.cover) {
+        await awsS3
+            .deleteObject({
+                Bucket: `${bucketName}/uploads-${userId}`,
+                Key: currentUser.cover.split('/')[1],
+            })
+            .promise();
+    }
     // Uploading files to the bucket
     const uploadData = await awsS3.upload(params).promise();
-    await awsS3
-        .deleteObject({
-            Bucket: `${bucketName}/uploads-${userId}`,
-            Key: currentUser.cover.split('/')[1],
-        })
-        .promise();
+
     currentUser.cover = uploadData.Key;
     await currentUser.save();
 
@@ -122,14 +123,19 @@ exports.updateProfilePhoto = catchAsync(async (req, res, next) => {
         }`,
         Body: croppedImage,
     };
+
+    if (currentUser.photo) {
+        await awsS3
+            .deleteObject({
+                Bucket: `${bucketName}/uploads-${userId}`,
+                Key: currentUser.photo.split('/')[1],
+            })
+            .promise();
+    }
+
     // Uploading files to the bucket
     const uploadData = await awsS3.upload(params).promise();
-    await awsS3
-        .deleteObject({
-            Bucket: `${bucketName}/uploads-${userId}`,
-            Key: currentUser.photo.split('/')[1],
-        })
-        .promise();
+
     currentUser.photo = uploadData.Key;
     await currentUser.save();
 

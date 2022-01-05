@@ -44,11 +44,19 @@ function ProfilePhotoModal(props) {
             croppedAreaPixels,
             image: props.selectedProfilePhoto,
             userId: currentUser._id,
-        }).then((res) => {
-            dispatch(authActions.setUserProfile(res.data.currentUser.photo));
-            setIsLoading(false);
-            props.onClose();
-        });
+        })
+            .then((res) => {
+                dispatch(
+                    authActions.setUserProfile(res.data.currentUser.photo)
+                );
+                setIsLoading(false);
+                props.onClose();
+            })
+            .catch(() => {
+                setIsLoading(false);
+                props.onClose();
+                props.onUpdateError();
+            });
     };
 
     return (

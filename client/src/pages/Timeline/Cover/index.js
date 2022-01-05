@@ -11,6 +11,8 @@ import {
     MenuItem,
     CircularProgress,
     Backdrop,
+    Snackbar,
+    Alert,
 } from '@mui/material';
 import { Row, Col } from 'antd';
 import { useSelector } from 'react-redux';
@@ -59,6 +61,15 @@ function Cover(props) {
     const [editableProfilePhoto, setEditableProfilePhoto] = useState();
     const [isEditProfilePhotoModalVisible, setIsEditProfilePhotoModalVisible] =
         useState(false);
+    const [errorUpdateCoverMessage, setErrorUpdateCoverMessage] = useState('');
+    const [isErrorUpdateCoverAlertVisible, setIsErrorUpdateCoverAlertVisible] =
+        useState(false);
+    const [errorUpdateProfileMessage, setErrorUpdateProfileMessage] =
+        useState('');
+    const [
+        isErrorUpdateProfileAlertVisible,
+        setIsErrorUpdateProfileAlertVisible,
+    ] = useState(false);
     const isMobile = useMediaQuery('(max-width:576px)');
     const dispatch = useDispatch();
 
@@ -99,15 +110,23 @@ function Cover(props) {
                     croppedAreaPixels,
                     image: coverEditor,
                     userId: currentUser._id,
-                }).then((res) => {
-                    setIsCoverEditCropperVisible(false);
-                    setIsSaveCoverBarVisible(false);
-                    dispatch(
-                        authActions.setUserCover(res.data.currentUser.cover)
-                    );
-                    setCurrentCoverPhoto(res.data.currentUser.cover);
-                    setIsLoading(false);
-                });
+                })
+                    .then((res) => {
+                        setIsCoverEditCropperVisible(false);
+                        setIsSaveCoverBarVisible(false);
+                        dispatch(
+                            authActions.setUserCover(res.data.currentUser.cover)
+                        );
+                        setCurrentCoverPhoto(res.data.currentUser.cover);
+                        setIsLoading(false);
+                    })
+                    .catch(() => {
+                        setErrorUpdateCoverMessage('Cannot update cover photo');
+                        setIsErrorUpdateCoverAlertVisible(true);
+                        setIsCoverEditCropperVisible(false);
+                        setIsSaveCoverBarVisible(false);
+                        setIsLoading(false);
+                    });
             } else {
                 setIsCoverEditCropperVisible(false);
                 setIsSaveCoverBarVisible(false);
@@ -148,6 +167,11 @@ function Cover(props) {
 
     const handleCloseProfilePhotoModal = () => {
         setIsEditProfilePhotoModalVisible(false);
+    };
+
+    const handleUpdateProfilePhotoError = () => {
+        setIsErrorUpdateProfileAlertVisible(true);
+        setErrorUpdateProfileMessage('Cannot update profile photo');
     };
 
     return (
@@ -193,6 +217,40 @@ function Cover(props) {
                         </Button>
                     </Stack>
                 </div>
+            )}
+            {isErrorUpdateCoverAlertVisible && (
+                <Snackbar
+                    open={isErrorUpdateCoverAlertVisible}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    autoHideDuration={6000}
+                    onClose={() => setIsErrorUpdateCoverAlertVisible(false)}
+                >
+                    <Alert
+                        onClose={() => setIsErrorUpdateCoverAlertVisible(false)}
+                        severity='error'
+                        sx={{ width: '100%' }}
+                    >
+                        {errorUpdateCoverMessage}
+                    </Alert>
+                </Snackbar>
+            )}
+            {isErrorUpdateProfileAlertVisible && (
+                <Snackbar
+                    open={isErrorUpdateProfileAlertVisible}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                    autoHideDuration={6000}
+                    onClose={() => setIsErrorUpdateProfileAlertVisible(false)}
+                >
+                    <Alert
+                        onClose={() =>
+                            setIsErrorUpdateProfileAlertVisible(false)
+                        }
+                        severity='error'
+                        sx={{ width: '100%' }}
+                    >
+                        {errorUpdateProfileMessage}
+                    </Alert>
+                </Snackbar>
             )}
             {isCoverEditCropperVisible ? (
                 <div className='cropContainer'>
@@ -479,6 +537,7 @@ function Cover(props) {
                     visible={isEditProfilePhotoModalVisible}
                     onClose={handleCloseProfilePhotoModal}
                     selectedProfilePhoto={editableProfilePhoto}
+                    onUpdateError={handleUpdateProfilePhotoError}
                 />
             )}
         </div>
